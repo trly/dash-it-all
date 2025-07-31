@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Test//Test//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:team-meeting-2025-01-31@company.com
+DTSTART:20250131T140000Z
+DTEND:20250131T150000Z
+SUMMARY:Weekly Team Standup
+DESCRIPTION:Weekly team synchronization meeting to discuss progress and blockers
+LOCATION:Conference Room A
+ORGANIZER:mailto:manager@company.com
+ATTENDEE:mailto:john@company.com
+ATTENDEE:mailto:jane@company.com
+STATUS:CONFIRMED
+CATEGORIES:Work,Meeting
+END:VEVENT
+END:VCALENDAR

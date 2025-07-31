@@ -1,0 +1,44 @@
+export interface CalendarEvent {
+	uid: string;
+	summary: string;
+	description?: string;
+	start: Date;
+	end?: Date;
+	location?: string;
+	organizer?: string;
+	attendees?: string[];
+	categories?: string[];
+	status?: string;
+	rrule?: string;
+	collection: string;
+	filePath: string;
+}
+
+export interface VdirCollectionConfig {
+	name: string;
+	path: string;
+	color?: string;
+	displayname?: string;
+	description?: string;
+	order?: number;
+	enabled?: boolean;
+}
+
+export interface AppConfig {
+	collections: Record<string, string>;
+	refreshInterval: number;
+	watchFiles: boolean;
+}
+
+export interface VdirMetadata {
+	color?: string;
+	displayname?: string;
+	description?: string;
+	order?: number;
+}
+
+export interface FileWatcherEvent {
+	type: 'add' | 'change' | 'unlink';
+	filePath: string;
+	collection: string;
+}
