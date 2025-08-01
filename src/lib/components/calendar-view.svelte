@@ -32,7 +32,8 @@
 		const days: Date[] = [];
 
 		if (viewType === 'week') {
-			const startDate = getWeekStart(currentDate);
+			// If showing less than 7 days, start from today; otherwise start from week beginning
+			const startDate = daysToShow < 7 ? new SvelteDate(currentDate) : getWeekStart(currentDate);
 			for (let i = 0; i < daysToShow; i++) {
 				const day = new SvelteDate(startDate);
 				day.setDate(startDate.getDate() + i);
@@ -103,6 +104,7 @@
 
 <div
 	class="calendar-view"
+	style="--days-to-show: {daysToShow}"
 	class:week-view={viewType === 'week'}
 	class:month-view={viewType === 'month'}
 >
@@ -131,6 +133,7 @@
 <style>
 	.calendar-view {
 		height: 100%;
+		width: 100%;
 		overflow-y: auto;
 	}
 
@@ -139,6 +142,7 @@
 		gap: 1px;
 		background-color: var(--border-color, #e1e5e9);
 		height: 100%;
+		width: 100%;
 	}
 
 	.week-view .calendar-grid {
@@ -158,12 +162,15 @@
 	}
 
 	.day-header {
-		padding: 0.75rem;
+		padding: 0.75rem 0.5rem;
 		font-weight: 600;
 		font-size: 0.875rem;
 		border-bottom: 1px solid var(--border-color, #e1e5e9);
 		text-align: center;
 		background-color: var(--bg-secondary, #f8f9fa);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.day-content {

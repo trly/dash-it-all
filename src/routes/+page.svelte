@@ -26,19 +26,18 @@
 <div class="dashboard">
 	<header class="dashboard-header">
 		<div class="header-content">
-			<h1>Dash It All</h1>
 			<Clock />
 		</div>
 	</header>
 
 	<main class="dashboard-main">
-		<section class="calendar-section">
-			<CalendarView events={$calendarEvents} viewType="week" daysToShow={7} />
-		</section>
-
 		<aside class="agenda-section">
 			<DailyAgenda events={$calendarEvents} />
 		</aside>
+
+		<section class="calendar-section">
+			<CalendarView events={$calendarEvents} viewType="week" daysToShow={3} />
+		</section>
 	</main>
 </div>
 
@@ -106,6 +105,8 @@
 		border-radius: 8px;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.agenda-section {
