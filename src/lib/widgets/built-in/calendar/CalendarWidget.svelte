@@ -1,17 +1,57 @@
 <script lang="ts">
 	import type { WidgetProps } from '$lib/types/widget.js';
+	import type { CalendarEvent } from '$lib/types';
 	import { Calendar } from 'lucide-svelte';
+	import { calendarEvents, calendarMetadata } from '$lib/stores/calendar-client';
 
 	interface Props extends WidgetProps {}
 
 	let { instance, settings }: Props = $props();
 
-	// TODO: Implement actual calendar event loading and display
-	const mockEvents = [
-		{ title: 'Meeting with team', time: '10:00 AM', date: 'Today' },
-		{ title: 'Project deadline', time: '5:00 PM', date: 'Tomorrow' },
-		{ title: 'Doctor appointment', time: '2:00 PM', date: 'Friday' }
-	];
+	function getUpcomingEvents(): CalendarEvent[] {
+		const now = new Date();
+		const weekFromNow = new Date();
+		weekFromNow.setDate(weekFromNow.getDate() + 7);
+
+		return $calendarEvents
+			.filter((event) => {
+				const eventDate = new Date(event.start);
+				return eventDate >= now && eventDate <= weekFromNow;
+			})
+			.sort((a, b) => a.start.getTime() - b.start.getTime())
+			.slice(0, 5); // Show only next 5 events
+	}
+
+	function formatEventTime(event: CalendarEvent): string {
+		const start = new Date(event.start);
+		return start.toLocaleTimeString('en-US', {
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true
+		});
+	}
+
+	function formatEventDate(event: CalendarEvent): string {
+		const start = new Date(event.start);
+		const today = new Date();
+		const tomorrow = new Date(today);
+		tomorrow.setDate(tomorrow.getDate() + 1);
+
+		if (start.toDateString() === today.toDateString()) {
+			return 'Today';
+		} else if (start.toDateString() === tomorrow.toDateString()) {
+			return 'Tomorrow';
+		} else {
+			return start.toLocaleDateString('en-US', { weekday: 'short' });
+		}
+	}
+
+	function getCollectionColor(collectionName: string): string {
+		const metadata = $calendarMetadata.get(collectionName);
+		return metadata?.color || '#4285f4';
+	}
+
+	const upcomingEvents = $derived(getUpcomingEvents());
 </script>
 
 <div class="calendar-widget">
@@ -21,15 +61,19 @@
 	</div>
 
 	<div class="events-list">
-		{#each mockEvents as event}
-			<div class="event-item">
-				<div class="event-time">{event.time}</div>
-				<div class="event-details">
-					<div class="event-title">{event.title}</div>
-					<div class="event-date">{event.date}</div>
+		{#if upcomingEvents.length === 0}
+			<div class="no-events">No upcoming events</div>
+		{:else}
+			{#each upcomingEvents as event}
+				<div class="event-item" style="border-left-color: {getCollectionColor(event.collection)}">
+					<div class="event-time">{formatEventTime(event)}</div>
+					<div class="event-details">
+						<div class="event-title">{event.summary}</div>
+						<div class="event-date">{formatEventDate(event)}</div>
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/if}
 	</div>
 </div>
 
@@ -69,10 +113,20 @@
 		gap: 0.75rem;
 		padding: 0.5rem 0;
 		border-bottom: 1px solid #f3f4f6;
+		border-left: 3px solid #4285f4;
+		padding-left: 0.75rem;
+		margin-left: -0.75rem;
 	}
 
 	.event-item:last-child {
 		border-bottom: none;
+	}
+
+	.no-events {
+		text-align: center;
+		color: #6b7280;
+		font-style: italic;
+		padding: 2rem 0;
 	}
 
 	.event-time {

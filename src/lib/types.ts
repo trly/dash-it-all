@@ -28,6 +28,27 @@ export interface AppConfig {
 	collections: Record<string, string>;
 	refreshInterval: number;
 	watchFiles: boolean;
+	server?: {
+		port?: number;
+		host?: string;
+	};
+	fileWatcher?: {
+		ignorePattern?: string;
+		depth?: number;
+	};
+	api?: {
+		baseUrl?: string;
+		timeout?: number;
+	};
+	theme?: {
+		gridColumns?: string;
+		colors?: {
+			textPrimary?: string;
+			textSecondary?: string;
+			bgPrimary?: string;
+			colorPrimary?: string;
+		};
+	};
 }
 
 export interface VdirMetadata {

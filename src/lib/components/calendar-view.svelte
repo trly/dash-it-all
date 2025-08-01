@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CalendarEvent } from '$lib/types';
+	import { calendarMetadata } from '$lib/stores/calendar-client';
 
 	interface Props {
 		events: CalendarEvent[];
@@ -91,6 +92,11 @@
 		return startTime;
 	}
 
+	function getCollectionColor(collectionName: string): string {
+		const metadata = $calendarMetadata.get(collectionName);
+		return metadata?.color || '#4285f4';
+	}
+
 	const displayDays = $derived(getDaysToDisplay());
 </script>
 
@@ -107,7 +113,7 @@
 				</div>
 				<div class="day-content">
 					{#each getEventsForDay(day) as event}
-						<div class="event" style="border-left-color: {event.collection}">
+						<div class="event" style="border-left-color: {getCollectionColor(event.collection)}">
 							<div class="event-time">{formatTimeRange(event)}</div>
 							<div class="event-title">{event.summary}</div>
 							{#if event.location}

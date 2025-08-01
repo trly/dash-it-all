@@ -1,8 +1,0 @@
-{
-  "collections": {
-    "personal": "/Users/trly/github.com/trly/dash-it-all/test-calendars/personal",
-    "work": "/Users/trly/github.com/trly/dash-it-all/test-calendars/work"
-  },
-  "refreshInterval": 5000,
-  "watchFiles": true
-}

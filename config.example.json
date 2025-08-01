@@ -1,0 +1,30 @@
+{
+  "collections": {
+    "Example Calendar": "/path/to/your/calendar/collection",
+    "Work": "/path/to/work/calendar",
+    "Personal": "/path/to/personal/calendar"
+  },
+  "refreshInterval": 5000,
+  "watchFiles": true,
+  "server": {
+    "port": 5173,
+    "host": "localhost"
+  },
+  "fileWatcher": {
+    "ignorePattern": "/(^|[\\/\\\\])\\..+/",
+    "depth": 0
+  },
+  "api": {
+    "baseUrl": "",
+    "timeout": 30000
+  },
+  "theme": {
+    "gridColumns": "2fr 1fr",
+    "colors": {
+      "textPrimary": "#1a1a1a",
+      "textSecondary": "#666",
+      "bgPrimary": "#ffffff",
+      "colorPrimary": "#4285f4"
+    }
+  }
+}

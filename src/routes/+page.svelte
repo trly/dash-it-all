@@ -1,37 +1,23 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
 	import Clock from '$lib/components/clock.svelte';
 	import CalendarView from '$lib/components/calendar-view.svelte';
 	import DailyAgenda from '$lib/components/daily-agenda.svelte';
+	import { calendarEvents, startEventRefresh } from '$lib/stores/calendar-client.js';
 	import type { CalendarEvent } from '$lib/types';
 
-	// Mock events for development
-	const mockEvents: CalendarEvent[] = [
-		{
-			uid: '1',
-			summary: 'Team Meeting',
-			start: new Date('2025-01-31T10:00:00'),
-			end: new Date('2025-01-31T11:00:00'),
-			location: 'Conference Room A',
-			collection: '#4285f4',
-			filePath: 'mock'
-		},
-		{
-			uid: '2',
-			summary: 'Project Review',
-			start: new Date('2025-01-31T14:30:00'),
-			end: new Date('2025-01-31T15:30:00'),
-			collection: '#34a853',
-			filePath: 'mock'
-		},
-		{
-			uid: '3',
-			summary: 'Client Call',
-			start: new Date('2025-02-01T09:00:00'),
-			end: new Date('2025-02-01T10:00:00'),
-			collection: '#fbbc04',
-			filePath: 'mock'
+	let cleanup: (() => void) | null = null;
+
+	// Initialize calendar data loading on mount
+	onMount(() => {
+		cleanup = startEventRefresh(30000); // Refresh every 30 seconds
+	});
+
+	onDestroy(() => {
+		if (cleanup) {
+			cleanup();
 		}
-	];
+	});
 </script>
 
 <svelte:head>
@@ -48,11 +34,11 @@
 
 	<main class="dashboard-main">
 		<section class="calendar-section">
-			<CalendarView events={mockEvents} viewType="week" daysToShow={7} />
+			<CalendarView events={$calendarEvents} viewType="week" daysToShow={7} />
 		</section>
 
 		<aside class="agenda-section">
-			<DailyAgenda events={mockEvents} />
+			<DailyAgenda events={$calendarEvents} />
 		</aside>
 	</main>
 </div>

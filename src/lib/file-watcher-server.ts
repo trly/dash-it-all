@@ -2,7 +2,7 @@ import chokidar from 'chokidar';
 import { readdir } from 'fs/promises';
 import { join, basename } from 'path';
 import { VdirParser } from './vdir-parser.js';
-import { loadConfig } from './config.js';
+import { loadServerConfig } from './config-server.js';
 import { readVdirMetadata, isVdirItem, isVdirMetadata } from './vdir-metadata.js';
 import type {
 	CalendarEvent,
@@ -11,7 +11,7 @@ import type {
 	VdirMetadata
 } from './types.js';
 
-export class FileWatcher {
+export class ServerFileWatcher {
 	private watchers: ReturnType<typeof chokidar.watch>[] = [];
 	private events: Map<string, CalendarEvent> = new Map();
 	private metadata: Map<string, VdirMetadata> = new Map();
@@ -23,7 +23,7 @@ export class FileWatcher {
 	 */
 	async init(): Promise<void> {
 		try {
-			const config = await loadConfig();
+			const config = await loadServerConfig();
 			if (!config || !config.watchFiles) {
 				console.log('File watcher disabled in config');
 				return;
@@ -98,11 +98,17 @@ export class FileWatcher {
 	private async watchCollection(collection: VdirCollectionConfig): Promise<void> {
 		try {
 			// Watch the entire directory for vdir structure
+			const config = await loadServerConfig();
+			const ignorePattern = config.fileWatcher?.ignorePattern ? 
+				new RegExp(config.fileWatcher.ignorePattern) : 
+				/(^|[\/\\])\../;
+			const depth = config.fileWatcher?.depth ?? 0;
+			
 			const watcher = chokidar.watch(collection.path, {
-				ignored: /(^|[\/\\])\../, // ignore dotfiles
+				ignored: ignorePattern,
 				persistent: true,
 				ignoreInitial: true, // we already loaded initial events
-				depth: 0 // only watch files in the collection directory, not subdirectories
+				depth
 			});
 
 			watcher
@@ -267,4 +273,4 @@ export class FileWatcher {
 }
 
 // Export a singleton instance
-export const fileWatcher = new FileWatcher();
+export const serverFileWatcher = new ServerFileWatcher();

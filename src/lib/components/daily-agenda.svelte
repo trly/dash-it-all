@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CalendarEvent } from '$lib/types';
+	import { calendarMetadata } from '$lib/stores/calendar-client';
 
 	interface Props {
 		events: CalendarEvent[];
@@ -11,10 +12,22 @@
 	function getTodaysEvents(): CalendarEvent[] {
 		return events
 			.filter((event) => {
-				const eventDate = new Date(event.start);
-				return eventDate.toDateString() === targetDate.toDateString();
+				if (!event || !event.start) return false;
+				try {
+					const eventDate = new Date(event.start);
+					const target = new Date(targetDate);
+					return eventDate.toDateString() === target.toDateString();
+				} catch {
+					return false;
+				}
 			})
-			.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+			.sort((a, b) => {
+				try {
+					return new Date(a.start).getTime() - new Date(b.start).getTime();
+				} catch {
+					return 0;
+				}
+			});
 	}
 
 	function formatTime(date: Date): string {
@@ -26,14 +39,20 @@
 	}
 
 	function formatTimeRange(event: CalendarEvent): string {
-		const start = new Date(event.start);
-		const end = event.end ? new Date(event.end) : null;
+		if (!event.start) return 'Invalid time';
 
-		if (end && end.toDateString() === start.toDateString()) {
-			return `${formatTime(start)} - ${formatTime(end)}`;
+		try {
+			const start = new Date(event.start);
+			const end = event.end ? new Date(event.end) : null;
+
+			if (end && end.toDateString() === start.toDateString()) {
+				return `${formatTime(start)} - ${formatTime(end)}`;
+			}
+
+			return formatTime(start);
+		} catch {
+			return 'Invalid time';
 		}
-
-		return formatTime(start);
 	}
 
 	function isEventNow(event: CalendarEvent): boolean {
@@ -60,6 +79,11 @@
 		});
 	}
 
+	function getCollectionColor(collectionName: string): string {
+		const metadata = $calendarMetadata.get(collectionName);
+		return metadata?.color || '#4285f4';
+	}
+
 	const todaysEvents = $derived(getTodaysEvents());
 </script>
 
@@ -84,19 +108,20 @@
 						class="event-item"
 						class:current={isEventNow(event)}
 						class:upcoming={isEventUpcoming(event)}
-						style="border-left-color: {event.collection}"
+						style="border-left-color: {getCollectionColor(event.collection)}"
 					>
 						<div class="event-time">
 							{formatTimeRange(event)}
 						</div>
 						<div class="event-details">
-							<div class="event-title">{event.summary}</div>
+							<div class="event-title">{event.summary || 'Untitled Event'}</div>
 							{#if event.location}
 								<div class="event-location">📍 {event.location}</div>
 							{/if}
 							{#if event.description}
 								<div class="event-description">{event.description}</div>
 							{/if}
+							<div class="event-collection">{event.collection}</div>
 						</div>
 						{#if isEventNow(event)}
 							<div class="status-indicator current-indicator">NOW</div>
@@ -212,6 +237,14 @@
 		font-size: 0.875rem;
 		color: var(--text-secondary, #666);
 		line-height: 1.4;
+	}
+
+	.event-collection {
+		font-size: 0.75rem;
+		color: var(--text-secondary, #666);
+		font-weight: 500;
+		margin-top: 0.25rem;
+		opacity: 0.8;
 	}
 
 	.status-indicator {
