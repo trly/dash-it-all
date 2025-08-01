@@ -4,7 +4,6 @@
 	import CalendarView from '$lib/components/calendar-view.svelte';
 	import DailyAgenda from '$lib/components/daily-agenda.svelte';
 	import { calendarEvents, startEventRefresh } from '$lib/stores/calendar-client.js';
-	import type { CalendarEvent } from '$lib/types';
 
 	let cleanup: (() => void) | null = null;
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CalendarEvent } from '$lib/types';
 	import { calendarMetadata } from '$lib/stores/calendar-client';
+	import { SvelteDate } from 'svelte/reactivity';
 
 	interface Props {
 		events: CalendarEvent[];
@@ -13,14 +14,14 @@
 		events = [],
 		viewType = 'week',
 		daysToShow = 7,
-		currentDate = new Date()
+		currentDate = new SvelteDate()
 	}: Props = $props();
 
 	function getWeekStart(date: Date): Date {
-		const d = new Date(date);
+		const d = new SvelteDate(date);
 		const day = d.getDay();
 		const diff = d.getDate() - day;
-		return new Date(d.setDate(diff));
+		return new SvelteDate(d.setDate(diff));
 	}
 
 	function getMonthStart(date: Date): Date {
@@ -33,20 +34,20 @@
 		if (viewType === 'week') {
 			const startDate = getWeekStart(currentDate);
 			for (let i = 0; i < daysToShow; i++) {
-				const day = new Date(startDate);
+				const day = new SvelteDate(startDate);
 				day.setDate(startDate.getDate() + i);
 				days.push(day);
 			}
 		} else {
 			const startDate = getMonthStart(currentDate);
-			const daysInMonth = new Date(
+			const daysInMonth = new SvelteDate(
 				currentDate.getFullYear(),
 				currentDate.getMonth() + 1,
 				0
 			).getDate();
 
 			for (let i = 0; i < daysInMonth; i++) {
-				const day = new Date(startDate);
+				const day = new SvelteDate(startDate);
 				day.setDate(startDate.getDate() + i);
 				days.push(day);
 			}
@@ -106,13 +107,13 @@
 	class:month-view={viewType === 'month'}
 >
 	<div class="calendar-grid">
-		{#each displayDays as day}
+		{#each displayDays as day (day.toISOString())}
 			<div class="day-column">
 				<div class="day-header">
 					{formatDayHeader(day)}
 				</div>
 				<div class="day-content">
-					{#each getEventsForDay(day) as event}
+					{#each getEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
 						<div class="event" style="border-left-color: {getCollectionColor(event.collection)}">
 							<div class="event-time">{formatTimeRange(event)}</div>
 							<div class="event-title">{event.summary}</div>

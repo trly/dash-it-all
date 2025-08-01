@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let currentTime = new Date();
 
 	onMount(() => {
-		const interval = setInterval(() => {
-			currentTime = new Date();
-		}, 1000);
+		if (browser) {
+			const interval = setInterval(() => {
+				currentTime = new Date();
+			}, 1000);
 
-		return () => clearInterval(interval);
+			return () => clearInterval(interval);
+		}
 	});
 
 	function formatTime(date: Date): string {
@@ -19,14 +22,7 @@
 		});
 	}
 
-	function formatDate(date: Date): string {
-		return date.toLocaleDateString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
+
 </script>
 
 <div class="clock-container">

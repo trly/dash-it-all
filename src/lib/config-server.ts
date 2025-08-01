@@ -40,7 +40,7 @@ export async function loadServerConfig(): Promise<AppConfig> {
 
 	try {
 		let configText: string;
-		
+
 		if (existsSync(configPath)) {
 			configText = await readFile(configPath, 'utf-8');
 		} else if (existsSync(fallbackPath)) {

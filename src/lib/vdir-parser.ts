@@ -12,7 +12,7 @@ export class VdirParser {
 			const parsed = ical.parseICS(fileContent);
 			const events: CalendarEvent[] = [];
 
-			for (const [key, component] of Object.entries(parsed)) {
+			for (const [, component] of Object.entries(parsed)) {
 				if (component.type === 'VEVENT') {
 					const event = this.transformEvent(component, collectionName, filePath);
 					if (event) {

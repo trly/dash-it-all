@@ -2,8 +2,11 @@
 	import type { WidgetProps } from '$lib/types/widget.js';
 	import { Clock } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
-	interface Props extends WidgetProps {}
+	interface Props extends WidgetProps {
+		// Clock widget specific props can be added here
+	}
 
 	let { instance, settings }: Props = $props();
 
@@ -11,13 +14,15 @@
 	let intervalId: ReturnType<typeof setInterval>;
 
 	onMount(() => {
-		intervalId = setInterval(() => {
-			currentTime = new Date();
-		}, 1000);
+		if (browser) {
+			intervalId = setInterval(() => {
+				currentTime = new Date();
+			}, 1000);
 
-		return () => {
-			clearInterval(intervalId);
-		};
+			return () => {
+				clearInterval(intervalId);
+			};
+		}
 	});
 
 	const formatTime = (date: Date, format: string) => {

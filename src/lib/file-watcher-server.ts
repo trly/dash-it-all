@@ -99,11 +99,11 @@ export class ServerFileWatcher {
 		try {
 			// Watch the entire directory for vdir structure
 			const config = await loadServerConfig();
-			const ignorePattern = config.fileWatcher?.ignorePattern ? 
-				new RegExp(config.fileWatcher.ignorePattern) : 
-				/(^|[\/\\])\../;
+			const ignorePattern = config.fileWatcher?.ignorePattern
+				? new RegExp(config.fileWatcher.ignorePattern)
+				: /(^|[/\\])\../;
 			const depth = config.fileWatcher?.depth ?? 0;
-			
+
 			const watcher = chokidar.watch(collection.path, {
 				ignored: ignorePattern,
 				persistent: true,
@@ -190,7 +190,7 @@ export class ServerFileWatcher {
 	private async processMetadataFile(
 		filePath: string,
 		collectionName: string,
-		type: 'add' | 'change' | 'unlink'
+		_type: 'add' | 'change' | 'unlink'
 	): Promise<void> {
 		// Reload metadata for this vdir collection
 		const collectionPath = filePath.substring(0, filePath.lastIndexOf('/'));

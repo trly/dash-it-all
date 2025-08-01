@@ -103,7 +103,7 @@
 			</div>
 		{:else}
 			<div class="events-list">
-				{#each todaysEvents as event}
+				{#each todaysEvents as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
 					<div
 						class="event-item"
 						class:current={isEventNow(event)}

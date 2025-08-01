@@ -3,14 +3,17 @@
 	import type { CalendarEvent } from '$lib/types';
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata } from '$lib/stores/calendar-client';
+	import { SvelteDate } from 'svelte/reactivity';
 
-	interface Props extends WidgetProps {}
+	interface Props extends WidgetProps {
+		// Calendar widget specific props can be added here
+	}
 
-	let { instance, settings }: Props = $props();
+	let { instance }: Props = $props();
 
 	function getUpcomingEvents(): CalendarEvent[] {
-		const now = new Date();
-		const weekFromNow = new Date();
+		const now = new SvelteDate();
+		const weekFromNow = new SvelteDate();
 		weekFromNow.setDate(weekFromNow.getDate() + 7);
 
 		return $calendarEvents
@@ -32,9 +35,9 @@
 	}
 
 	function formatEventDate(event: CalendarEvent): string {
-		const start = new Date(event.start);
-		const today = new Date();
-		const tomorrow = new Date(today);
+		const start = new SvelteDate(event.start);
+		const today = new SvelteDate();
+		const tomorrow = new SvelteDate(today);
 		tomorrow.setDate(tomorrow.getDate() + 1);
 
 		if (start.toDateString() === today.toDateString()) {
@@ -64,7 +67,7 @@
 		{#if upcomingEvents.length === 0}
 			<div class="no-events">No upcoming events</div>
 		{:else}
-			{#each upcomingEvents as event}
+			{#each upcomingEvents as event (event.uid)}
 				<div class="event-item" style="border-left-color: {getCollectionColor(event.collection)}">
 					<div class="event-time">{formatEventTime(event)}</div>
 					<div class="event-details">

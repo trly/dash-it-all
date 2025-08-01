@@ -12,6 +12,7 @@ export interface CalendarEvent {
 	rrule?: string;
 	collection: string;
 	filePath: string;
+	id?: string; // Optional unique identifier for React keys
 }
 
 export interface VdirCollectionConfig {

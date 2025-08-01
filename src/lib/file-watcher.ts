@@ -99,7 +99,7 @@ export class FileWatcher {
 		try {
 			// Watch the entire directory for vdir structure
 			const watcher = chokidar.watch(collection.path, {
-				ignored: /(^|[\/\\])\../, // ignore dotfiles
+				ignored: /(^|[/\\])\../, // ignore dotfiles
 				persistent: true,
 				ignoreInitial: true, // we already loaded initial events
 				depth: 0 // only watch files in the collection directory, not subdirectories
@@ -184,7 +184,7 @@ export class FileWatcher {
 	private async processMetadataFile(
 		filePath: string,
 		collectionName: string,
-		type: 'add' | 'change' | 'unlink'
+		_type: 'add' | 'change' | 'unlink'
 	): Promise<void> {
 		// Reload metadata for this vdir collection
 		const collectionPath = filePath.substring(0, filePath.lastIndexOf('/'));
