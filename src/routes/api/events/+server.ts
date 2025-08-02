@@ -2,19 +2,9 @@ import { json } from '@sveltejs/kit';
 import { serverFileWatcher } from '$lib/file-watcher-server.js';
 import type { RequestHandler } from './$types.js';
 
-// Initialize file watcher on server startup
-let initialized = false;
-
-async function ensureInitialized() {
-	if (!initialized) {
-		await serverFileWatcher.init();
-		initialized = true;
-	}
-}
-
 export const GET: RequestHandler = async () => {
 	try {
-		await ensureInitialized();
+		await serverFileWatcher.init();
 		const events = serverFileWatcher.getEvents();
 		return json(events);
 	} catch (error) {

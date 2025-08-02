@@ -18,43 +18,56 @@ export class ServerFileWatcher {
 	private metadata: Map<string, VdirMetadata> = new Map();
 	private listeners: Set<(events: CalendarEvent[]) => void> = new Set();
 	private fileListeners: Set<(event: FileWatcherEvent) => void> = new Set();
+	private initialized = false;
+	private initPromise?: Promise<void>;
 
 	/**
 	 * Initialize the file watcher with vdir collections from config
 	 */
 	async init(): Promise<void> {
-		try {
-			const config = await loadServerConfig();
-			if (!config || !config.watchFiles) {
-				console.log('File watcher disabled in config');
-				return;
-			}
+		if (this.initialized) return;
+		if (this.initPromise) return this.initPromise;
 
-			// Stop any existing watchers
-			this.stop();
-
-			// Scan all vdir root directories for collections
-			const collections = await scanAllVdirRoots(config.vdirRoots);
-
-			if (collections.length === 0) {
-				console.warn('No vdir collections found in configured root directories');
-				return;
-			}
-
-			// Load initial events from all vdir collections
-			await this.loadInitialEvents(collections);
-
-			// Set up watchers for each vdir collection
-			for (const collection of collections) {
-				if (collection.enabled !== false) {
-					await this.watchCollection(collection);
+		this.initPromise = (async () => {
+			try {
+				const config = await loadServerConfig();
+				if (!config || !config.watchFiles) {
+					console.log('File watcher disabled in config');
+					return;
 				}
-			}
 
-			console.log(`File watcher initialized for ${this.watchers.length} vdir collections`);
-		} catch (error) {
-			console.error('Failed to initialize file watcher:', error);
-		}
+				// Stop any existing watchers
+				this.stop();
+
+				// Scan all vdir root directories for collections
+				const collections = await scanAllVdirRoots(config.vdirRoots);
+
+				if (collections.length === 0) {
+					console.warn('No vdir collections found in configured root directories');
+					return;
+				}
+
+				// Load initial events from all vdir collections
+				await this.loadInitialEvents(collections);
+
+				// Set up watchers for each vdir collection
+				for (const collection of collections) {
+					if (collection.enabled !== false) {
+						await this.watchCollection(collection);
+					}
+				}
+
+				console.log(`File watcher initialized for ${this.watchers.length} vdir collections`);
+				this.initialized = true;
+			} catch (error) {
+				console.error('Failed to initialize file watcher:', error);
+				throw error;
+			} finally {
+				this.initPromise = undefined;
+			}
+		})();
+
+		return this.initPromise;
 	}
 
 	/**
@@ -256,6 +269,7 @@ export class ServerFileWatcher {
 		this.watchers = [];
 		this.events.clear();
 		this.metadata.clear();
+		this.initialized = false;
 		console.log('File watchers stopped');
 	}
 
