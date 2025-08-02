@@ -84,8 +84,6 @@
 		max-width: 100%;
 	}
 
-
-
 	.dashboard-main {
 		flex: 1;
 		display: grid;
