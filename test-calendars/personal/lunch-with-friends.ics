@@ -3,9 +3,9 @@ VERSION:2.0
 PRODID:-//Test//Test//EN
 CALSCALE:GREGORIAN
 BEGIN:VEVENT
-UID:lunch-with-friends-2025-01-31@example.com
-DTSTART:20250131T120000Z
-DTEND:20250131T140000Z
+UID:lunch-with-friends-2025-02-10@example.com
+DTSTART:20250210T120000Z
+DTEND:20250210T140000Z
 SUMMARY:Lunch with Friends
 DESCRIPTION:Catching up with old friends at the local restaurant
 LOCATION:The Corner Bistro, 123 Main St

@@ -1,9 +1,5 @@
 {
-	"collections": {
-		"Example Calendar": "/path/to/your/calendar/collection",
-		"Work": "/path/to/work/calendar",
-		"Personal": "/path/to/personal/calendar"
-	},
+	"vdirRoots": ["/path/to/your/calendars", "/home/user/.local/share/calendars"],
 	"refreshInterval": 5000,
 	"watchFiles": true,
 	"server": {

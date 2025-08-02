@@ -26,7 +26,7 @@ export interface VdirCollectionConfig {
 }
 
 export interface AppConfig {
-	collections: Record<string, string>;
+	vdirRoots: string[]; // Array of root directories containing vdir collections
 	refreshInterval: number;
 	watchFiles: boolean;
 	server?: {

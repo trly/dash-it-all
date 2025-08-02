@@ -6,7 +6,7 @@ import type { AppConfig } from './types.js';
 let config: AppConfig | null = null;
 
 const DEFAULT_CONFIG: AppConfig = {
-	collections: {},
+	vdirRoots: [],
 	refreshInterval: 5000,
 	watchFiles: true,
 	server: {

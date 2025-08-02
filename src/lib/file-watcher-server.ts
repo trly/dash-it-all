@@ -4,6 +4,7 @@ import { join, basename } from 'path';
 import { VdirParser } from './vdir-parser.js';
 import { loadServerConfig } from './config-server.js';
 import { readVdirMetadata, isVdirItem, isVdirMetadata } from './vdir-metadata.js';
+import { scanAllVdirRoots } from './vdir-scanner.js';
 import type {
 	CalendarEvent,
 	VdirCollectionConfig,
@@ -32,14 +33,13 @@ export class ServerFileWatcher {
 			// Stop any existing watchers
 			this.stop();
 
-			// Convert config format to VdirCollectionConfig array
-			const collections: VdirCollectionConfig[] = Object.entries(config.collections).map(
-				([name, path]) => ({
-					name,
-					path,
-					enabled: true
-				})
-			);
+			// Scan all vdir root directories for collections
+			const collections = await scanAllVdirRoots(config.vdirRoots);
+
+			if (collections.length === 0) {
+				console.warn('No vdir collections found in configured root directories');
+				return;
+			}
 
 			// Load initial events from all vdir collections
 			await this.loadInitialEvents(collections);
