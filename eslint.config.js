@@ -21,6 +21,10 @@ export default [
 				$$Props: 'readonly',
 				$$Events: 'readonly',
 				$$Slots: 'readonly'
+			},
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: __dirname
 			}
 		}
 	},
