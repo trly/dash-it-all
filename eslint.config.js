@@ -24,12 +24,13 @@ export default [
 			},
 			parserOptions: {
 				projectService: true,
-				tsconfigRootDir: __dirname
+				tsconfigRootDir: __dirname,
+				extraFileExtensions: ['.svelte']
 			}
 		}
 	},
 	{
-		files: ['**/*.svelte'],
+		files: ['*.svelte', '**/*.svelte'],
 		languageOptions: {
 			globals: {
 				setInterval: 'readonly',
@@ -43,6 +44,13 @@ export default [
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/']
+		ignores: [
+			'build/',
+			'.svelte-kit/',
+			'dist/',
+			'eslint.config.js',
+			'svelte.config.js',
+			'vite.config.ts'
+		]
 	}
 ];
