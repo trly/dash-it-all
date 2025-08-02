@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		if (browser) {
-			const interval = setInterval(() => {
+			const interval: ReturnType<typeof setInterval> = setInterval(() => {
 				currentTime = new Date();
 			}, 1000);
 
@@ -21,8 +21,6 @@
 			minute: '2-digit'
 		});
 	}
-
-
 </script>
 
 <div class="clock-container">

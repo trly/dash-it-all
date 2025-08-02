@@ -5,9 +5,7 @@
 	import { calendarEvents, calendarMetadata } from '$lib/stores/calendar-client';
 	import { SvelteDate } from 'svelte/reactivity';
 
-	interface Props extends WidgetProps {
-		// Calendar widget specific props can be added here
-	}
+	type Props = WidgetProps;
 
 	let { instance }: Props = $props();
 

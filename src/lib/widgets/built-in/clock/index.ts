@@ -1,4 +1,5 @@
 import type { WidgetDefinition } from '$lib/types/widget.js';
+import type { ComponentType, SvelteComponent } from 'svelte';
 import ClockWidget from './ClockWidget.svelte';
 
 export const clockWidgetDefinition: WidgetDefinition = {
@@ -35,5 +36,5 @@ export const clockWidgetDefinition: WidgetDefinition = {
 			}
 		}
 	},
-	component: ClockWidget as any
+	component: ClockWidget as unknown as ComponentType<SvelteComponent>
 };

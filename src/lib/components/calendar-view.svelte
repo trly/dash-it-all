@@ -64,6 +64,19 @@
 		});
 	}
 
+	function getAllDayEventsForDay(day: Date): CalendarEvent[] {
+		return getEventsForDay(day).filter((event) => isAllDayEvent(event));
+	}
+
+	function getTimedEventsForDay(day: Date): CalendarEvent[] {
+		return getEventsForDay(day).filter((event) => !isAllDayEvent(event));
+	}
+
+	function isAllDayEvent(event: CalendarEvent): boolean {
+		// node-ical marks all day events with dateOnly property
+		return (event.start as Date & { dateOnly?: boolean })?.dateOnly === true;
+	}
+
 	function formatDayHeader(date: Date): string {
 		return date.toLocaleDateString('en-US', {
 			weekday: 'short',
@@ -115,7 +128,25 @@
 					{formatDayHeader(day)}
 				</div>
 				<div class="day-content">
-					{#each getEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
+					<!-- All Day Events Section -->
+					{#if getAllDayEventsForDay(day).length > 0}
+						<div class="all-day-section">
+							{#each getAllDayEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
+								<div
+									class="event all-day-event"
+									style="border-left-color: {getCollectionColor(event.collection)}"
+								>
+									<div class="event-title">{event.summary}</div>
+									{#if event.location}
+										<div class="event-location">{event.location}</div>
+									{/if}
+								</div>
+							{/each}
+						</div>
+					{/if}
+
+					<!-- Timed Events Section -->
+					{#each getTimedEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
 						<div class="event" style="border-left-color: {getCollectionColor(event.collection)}">
 							<div class="event-time">{formatTimeRange(event)}</div>
 							<div class="event-title">{event.summary}</div>
@@ -206,5 +237,20 @@
 	.event-location {
 		color: var(--text-secondary, #666);
 		font-size: 0.75rem;
+	}
+
+	.all-day-section {
+		border-bottom: 1px solid var(--border-color, #e1e5e9);
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+
+	.all-day-event {
+		background-color: var(--bg-all-day, #fff5e6);
+		border-left-width: 4px;
+	}
+
+	.all-day-event .event-title {
+		font-weight: 600;
 	}
 </style>

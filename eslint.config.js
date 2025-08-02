@@ -27,6 +27,12 @@ export default [
 	{
 		files: ['**/*.svelte'],
 		languageOptions: {
+			globals: {
+				setInterval: 'readonly',
+				clearInterval: 'readonly',
+				setTimeout: 'readonly',
+				clearTimeout: 'readonly'
+			},
 			parserOptions: {
 				parser: typescript.parser
 			}

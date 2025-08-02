@@ -1,4 +1,5 @@
 import type { WidgetDefinition } from '$lib/types/widget.js';
+import type { ComponentType, SvelteComponent } from 'svelte';
 import CalendarWidget from './CalendarWidget.svelte';
 
 export const calendarWidgetDefinition: WidgetDefinition = {
@@ -37,5 +38,5 @@ export const calendarWidgetDefinition: WidgetDefinition = {
 			}
 		}
 	},
-	component: CalendarWidget as any
+	component: CalendarWidget as unknown as ComponentType<SvelteComponent>
 };

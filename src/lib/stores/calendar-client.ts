@@ -57,11 +57,13 @@ export async function loadCalendarEvents(): Promise<void> {
 		if (response.ok) {
 			const events = await response.json();
 			// Convert date strings back to Date objects
-			const parsedEvents = events.map((event: Partial<CalendarEvent> & { start: string; end?: string }) => ({
-				...event,
-				start: new Date(event.start),
-				end: event.end ? new Date(event.end) : undefined
-			}));
+			const parsedEvents = events.map(
+				(event: Partial<CalendarEvent> & { start: string; end?: string }) => ({
+					...event,
+					start: new Date(event.start),
+					end: event.end ? new Date(event.end) : undefined
+				})
+			);
 			calendarEvents.set(parsedEvents);
 		} else {
 			console.error('Failed to load calendar events:', response.statusText);

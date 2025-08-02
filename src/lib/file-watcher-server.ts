@@ -146,7 +146,7 @@ export class ServerFileWatcher {
 			await this.processEventFile(filePath, collectionName, type);
 		} else if (isVdirMetadata(fileName)) {
 			// Handle vdir metadata file
-			await this.processMetadataFile(filePath, collectionName, type);
+			await this.processMetadataFile(filePath, collectionName);
 		}
 		// Ignore other files (like .tmp files)
 	}
@@ -187,11 +187,7 @@ export class ServerFileWatcher {
 	/**
 	 * Process a vdir metadata file change
 	 */
-	private async processMetadataFile(
-		filePath: string,
-		collectionName: string,
-		_type: 'add' | 'change' | 'unlink'
-	): Promise<void> {
+	private async processMetadataFile(filePath: string, collectionName: string): Promise<void> {
 		// Reload metadata for this vdir collection
 		const collectionPath = filePath.substring(0, filePath.lastIndexOf('/'));
 		try {

@@ -4,9 +4,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
-	interface Props extends WidgetProps {
-		// Clock widget specific props can be added here
-	}
+	type Props = WidgetProps;
 
 	let { instance, settings }: Props = $props();
 
@@ -17,7 +15,7 @@
 		if (browser) {
 			intervalId = setInterval(() => {
 				currentTime = new Date();
-			}, 1000);
+			}, 1000) as ReturnType<typeof setInterval>;
 
 			return () => {
 				clearInterval(intervalId);

@@ -1,6 +1,11 @@
-import ical from 'node-ical';
+import ical, { type VEvent, type Attendee } from 'node-ical';
 import { readFileSync } from 'fs';
 import type { CalendarEvent } from './types.js';
+
+// Extended VEvent with categories (runtime property from node-ical)
+interface ExtendedVEvent extends VEvent {
+	categories?: string[] | string;
+}
 
 export class VdirParser {
 	/**
@@ -32,7 +37,7 @@ export class VdirParser {
 	 * Transform a node-ical event to our CalendarEvent interface
 	 */
 	private static transformEvent(
-		component: any,
+		component: ExtendedVEvent,
 		collectionName: string,
 		filePath: string
 	): CalendarEvent | null {
@@ -49,11 +54,14 @@ export class VdirParser {
 				start: new Date(component.start),
 				end: component.end ? new Date(component.end) : undefined,
 				location: component.location || undefined,
-				organizer: component.organizer?.val || component.organizer || undefined,
+				organizer:
+					typeof component.organizer === 'string'
+						? component.organizer
+						: component.organizer?.val || undefined,
 				attendees: component.attendee
 					? Array.isArray(component.attendee)
-						? component.attendee.map((a: any) => a.val || a)
-						: [component.attendee.val || component.attendee]
+						? component.attendee.map((a: Attendee) => (typeof a === 'string' ? a : a.val))
+						: [typeof component.attendee === 'string' ? component.attendee : component.attendee.val]
 					: undefined,
 				categories: component.categories
 					? Array.isArray(component.categories)
