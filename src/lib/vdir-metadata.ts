@@ -13,7 +13,7 @@ export async function readVdirMetadata(collectionPath: string): Promise<VdirMeta
 		try {
 			const colorContent = await readFile(join(collectionPath, 'color'), 'utf8');
 			const color = colorContent.trim();
-			if (color.match(/^#[0-9A-Fa-f]{6}$/)) {
+			if (color.match(/^#[0-9A-Fa-f]{8}$/)) {
 				metadata.color = color;
 			}
 		} catch {
