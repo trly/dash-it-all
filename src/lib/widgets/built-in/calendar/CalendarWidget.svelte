@@ -2,7 +2,7 @@
 	import type { WidgetProps } from '$lib/types/widget.js';
 	import type { CalendarEvent } from '$lib/types';
 	import { Calendar } from 'lucide-svelte';
-	import { calendarEvents, calendarMetadata } from '$lib/stores/calendar-client';
+	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import { SvelteDate } from 'svelte/reactivity';
 
 	type Props = WidgetProps;
@@ -10,8 +10,8 @@
 	let { instance }: Props = $props();
 
 	function getUpcomingEvents(): CalendarEvent[] {
-		const now = new SvelteDate();
-		const weekFromNow = new SvelteDate();
+		const now = new SvelteDate($currentDate);
+		const weekFromNow = new SvelteDate($currentDate);
 		weekFromNow.setDate(weekFromNow.getDate() + 7);
 
 		return $calendarEvents
@@ -34,8 +34,8 @@
 
 	function formatEventDate(event: CalendarEvent): string {
 		const start = new SvelteDate(event.start);
-		const today = new SvelteDate();
-		const tomorrow = new SvelteDate(today);
+		const today = new SvelteDate($currentDate);
+		const tomorrow = new SvelteDate($currentDate);
 		tomorrow.setDate(tomorrow.getDate() + 1);
 
 		if (start.toDateString() === today.toDateString()) {

@@ -1,5 +1,48 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, readable } from 'svelte/store';
 import type { CalendarEvent, VdirMetadata } from '../types.js';
+
+// Reactive date store that updates at midnight and every minute
+export const currentDate = readable(new Date(), (set) => {
+	// Update every minute for real-time updates
+	const minuteInterval = setInterval(() => {
+		set(new Date());
+	}, 60 * 1000);
+
+	let dailyInterval: NodeJS.Timeout | null = null;
+
+	// Set up midnight rollover detection
+	function setupMidnightTimeout() {
+		const now = new Date();
+		const msUntilMidnight =
+			new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+
+		const midnightTimeout = setTimeout(() => {
+			set(new Date());
+			// Set up daily interval after first midnight
+			dailyInterval = setInterval(
+				() => {
+					set(new Date());
+				},
+				24 * 60 * 60 * 1000
+			);
+
+			// Setup next midnight timeout
+			setupMidnightTimeout();
+		}, msUntilMidnight);
+
+		return midnightTimeout;
+	}
+
+	const midnightTimeout = setupMidnightTimeout();
+
+	return () => {
+		clearInterval(minuteInterval);
+		clearTimeout(midnightTimeout);
+		if (dailyInterval) {
+			clearInterval(dailyInterval);
+		}
+	};
+});
 
 // Store for all calendar events
 export const calendarEvents = writable<CalendarEvent[]>([]);
@@ -22,8 +65,8 @@ export const eventsByCollection = derived(calendarEvents, ($events) => {
 });
 
 // Derived store for today's events
-export const todaysEvents = derived(calendarEvents, ($events) => {
-	const today = new Date();
+export const todaysEvents = derived([calendarEvents, currentDate], ([$events, $currentDate]) => {
+	const today = new Date($currentDate);
 	today.setHours(0, 0, 0, 0);
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
@@ -37,9 +80,9 @@ export const todaysEvents = derived(calendarEvents, ($events) => {
 });
 
 // Derived store for upcoming events (next 7 days)
-export const upcomingEvents = derived(calendarEvents, ($events) => {
-	const now = new Date();
-	const weekFromNow = new Date();
+export const upcomingEvents = derived([calendarEvents, currentDate], ([$events, $currentDate]) => {
+	const now = new Date($currentDate);
+	const weekFromNow = new Date($currentDate);
 	weekFromNow.setDate(weekFromNow.getDate() + 7);
 
 	return $events

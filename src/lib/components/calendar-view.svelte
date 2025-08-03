@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CalendarEvent } from '$lib/types';
-	import { calendarMetadata } from '$lib/stores/calendar-client';
+	import { calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import { SvelteDate } from 'svelte/reactivity';
 
 	interface Props {
@@ -14,8 +14,11 @@
 		events = [],
 		viewType = 'week',
 		daysToShow = 7,
-		currentDate = new SvelteDate()
+		currentDate: propCurrentDate = new SvelteDate()
 	}: Props = $props();
+
+	// Use reactive currentDate from store for midnight updates, fallback to prop
+	const reactiveCurrentDate = $derived($currentDate || propCurrentDate);
 
 	function getWeekStart(date: Date): Date {
 		const d = new SvelteDate(date);
@@ -33,17 +36,18 @@
 
 		if (viewType === 'week') {
 			// If showing less than 7 days, start from today; otherwise start from week beginning
-			const startDate = daysToShow < 7 ? new SvelteDate(currentDate) : getWeekStart(currentDate);
+			const startDate =
+				daysToShow < 7 ? new SvelteDate(reactiveCurrentDate) : getWeekStart(reactiveCurrentDate);
 			for (let i = 0; i < daysToShow; i++) {
 				const day = new SvelteDate(startDate);
 				day.setDate(startDate.getDate() + i);
 				days.push(day);
 			}
 		} else {
-			const startDate = getMonthStart(currentDate);
+			const startDate = getMonthStart(reactiveCurrentDate);
 			const daysInMonth = new SvelteDate(
-				currentDate.getFullYear(),
-				currentDate.getMonth() + 1,
+				reactiveCurrentDate.getFullYear(),
+				reactiveCurrentDate.getMonth() + 1,
 				0
 			).getDate();
 

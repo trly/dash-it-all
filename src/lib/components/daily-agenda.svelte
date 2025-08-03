@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CalendarEvent } from '$lib/types';
-	import { calendarMetadata } from '$lib/stores/calendar-client';
+	import { calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 
 	interface Props {
 		events: CalendarEvent[];
@@ -10,13 +10,28 @@
 	let { events = [], targetDate = new Date() }: Props = $props();
 
 	function getTodaysEvents(): CalendarEvent[] {
+		// Use currentDate to ensure reactivity on midnight rollover
+		const now = $currentDate;
 		return events
 			.filter((event) => {
 				if (!event || !event.start) return false;
 				try {
 					const eventDate = new Date(event.start);
 					const target = new Date(targetDate);
-					return eventDate.toDateString() === target.toDateString();
+
+					// Check if event is on the target date
+					if (eventDate.toDateString() !== target.toDateString()) {
+						return false;
+					}
+
+					// Filter out events that have ended
+					if (event.end) {
+						const eventEnd = new Date(event.end);
+						return eventEnd > now;
+					}
+
+					// If no end time, keep the event (assume it's ongoing or future)
+					return true;
 				} catch {
 					return false;
 				}
@@ -56,7 +71,7 @@
 	}
 
 	function isEventNow(event: CalendarEvent): boolean {
-		const now = new Date();
+		const now = $currentDate;
 		const start = new Date(event.start);
 		const end = event.end ? new Date(event.end) : new Date(start.getTime() + 60 * 60 * 1000); // Default 1 hour
 
@@ -64,7 +79,7 @@
 	}
 
 	function isEventUpcoming(event: CalendarEvent): boolean {
-		const now = new Date();
+		const now = $currentDate;
 		const start = new Date(event.start);
 		const timeDiff = start.getTime() - now.getTime();
 
