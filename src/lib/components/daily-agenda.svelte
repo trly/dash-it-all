@@ -154,13 +154,13 @@
 
 	.agenda-header h2 {
 		margin: 0 0 0.5rem 0;
-		font-size: 1.5rem;
+		font-size: 3rem;
 		font-weight: 600;
 		color: var(--text-primary, #1a1a1a);
 	}
 
 	.event-count {
-		font-size: 0.875rem;
+		font-size: 2rem;
 		color: var(--text-secondary, #666);
 	}
 
@@ -210,10 +210,9 @@
 
 	.event-time {
 		font-weight: 600;
-		font-size: 0.875rem;
+		font-size: 1.125rem;
 		color: var(--text-primary, #1a1a1a);
 		white-space: nowrap;
-		min-width: 120px;
 	}
 
 	.event-details {
@@ -223,25 +222,25 @@
 
 	.event-title {
 		font-weight: 500;
-		font-size: 1rem;
+		font-size: 1.25rem;
 		color: var(--text-primary, #1a1a1a);
 		margin-bottom: 0.25rem;
 	}
 
 	.event-location {
-		font-size: 0.875rem;
+		font-size: 1rem;
 		color: var(--text-secondary, #666);
 		margin-bottom: 0.25rem;
 	}
 
 	.event-description {
-		font-size: 0.875rem;
+		font-size: 1rem;
 		color: var(--text-secondary, #666);
 		line-height: 1.4;
 	}
 
 	.event-collection {
-		font-size: 0.75rem;
+		font-size: 0.875rem;
 		color: var(--text-secondary, #666);
 		font-weight: 500;
 		margin-top: 0.25rem;
@@ -255,6 +254,9 @@
 		border-radius: 12px;
 		text-align: center;
 		white-space: nowrap;
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
 	}
 
 	.current-indicator {
