@@ -7,6 +7,10 @@ export interface WidgetConfig {
 	version?: string;
 	author?: string;
 	category?: string;
+	maxSize?: {
+		width?: number;
+		height?: number;
+	};
 	settings?: Record<string, WidgetSettingDefinition>;
 }
 

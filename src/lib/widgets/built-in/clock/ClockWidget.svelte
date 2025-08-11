@@ -59,25 +59,28 @@
 
 <style>
 	.clock-container {
-		text-align: right;
-		padding: 0.5rem 0;
+		text-align: center;
+		padding: 0.5rem;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: flex-end;
+		align-items: center;
 	}
 
 	.time {
-		font-size: 2rem;
+		font-size: clamp(1.5rem, 8vw, 4rem);
 		font-weight: 300;
 		font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
 		color: var(--text-primary, #1a1a1a);
+		line-height: 1;
+		white-space: nowrap;
 	}
 
 	.date {
-		font-size: 1rem;
+		font-size: clamp(0.75rem, 3vw, 1.25rem);
 		color: var(--text-secondary, #666);
 		margin-top: 0.25rem;
+		line-height: 1.2;
 	}
 </style>
