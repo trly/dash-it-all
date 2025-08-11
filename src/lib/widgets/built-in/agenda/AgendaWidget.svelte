@@ -1,26 +1,25 @@
 <script lang="ts">
+	import type { WidgetProps } from '$lib/types/widget.js';
 	import type { CalendarEvent } from '$lib/types';
-	import { calendarMetadata, currentDate } from '$lib/stores/calendar-client';
+	import { Calendar } from 'lucide-svelte';
+	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 
-	interface Props {
-		events: CalendarEvent[];
-		targetDate?: Date;
-	}
+	type Props = WidgetProps;
 
-	let { events = [], targetDate = new Date() }: Props = $props();
+	let { instance, settings }: Props = $props();
 
 	function getTodaysEvents(): CalendarEvent[] {
-		// Use currentDate to ensure reactivity on midnight rollover
 		const now = $currentDate;
-		return events
+		const targetDate = new Date();
+		
+		return $calendarEvents
 			.filter((event) => {
 				if (!event || !event.start) return false;
 				try {
 					const eventDate = new Date(event.start);
-					const target = new Date(targetDate);
 
 					// Check if event is on the target date
-					if (eventDate.toDateString() !== target.toDateString()) {
+					if (eventDate.toDateString() !== targetDate.toDateString()) {
 						return false;
 					}
 
@@ -30,7 +29,6 @@
 						return eventEnd > now;
 					}
 
-					// If no end time, keep the event (assume it's ongoing or future)
 					return true;
 				} catch {
 					return false;
@@ -73,7 +71,7 @@
 	function isEventNow(event: CalendarEvent): boolean {
 		const now = $currentDate;
 		const start = new Date(event.start);
-		const end = event.end ? new Date(event.end) : new Date(start.getTime() + 60 * 60 * 1000); // Default 1 hour
+		const end = event.end ? new Date(event.end) : new Date(start.getTime() + 60 * 60 * 1000);
 
 		return now >= start && now <= end;
 	}
@@ -83,7 +81,12 @@
 		const start = new Date(event.start);
 		const timeDiff = start.getTime() - now.getTime();
 
-		return timeDiff > 0 && timeDiff <= 30 * 60 * 1000; // Next 30 minutes
+		return timeDiff > 0 && timeDiff <= 30 * 60 * 1000;
+	}
+
+	function getCollectionColor(collectionName: string): string {
+		const metadata = $calendarMetadata.get(collectionName);
+		return metadata?.color || '#4285f4';
 	}
 
 	function formatDateHeader(date: Date): string {
@@ -95,17 +98,12 @@
 		});
 	}
 
-	function getCollectionColor(collectionName: string): string {
-		const metadata = $calendarMetadata.get(collectionName);
-		return metadata?.color || '#4285f4';
-	}
-
 	const todaysEvents = $derived(getTodaysEvents());
 </script>
 
-<div class="daily-agenda">
+<div class="agenda-widget">
 	<div class="agenda-header">
-		<h2>{formatDateHeader(targetDate)}</h2>
+		<h2>{formatDateHeader(new Date())}</h2>
 		<div class="event-count">
 			{todaysEvents.length}
 			{todaysEvents.length === 1 ? 'event' : 'events'}
@@ -131,13 +129,15 @@
 						</div>
 						<div class="event-details">
 							<div class="event-title">{event.summary || 'Untitled Event'}</div>
-							{#if event.location}
+							{#if settings.showLocation && event.location}
 								<div class="event-location">📍 {event.location}</div>
 							{/if}
 							{#if event.description}
 								<div class="event-description">{event.description}</div>
 							{/if}
-							<div class="event-collection">{event.collection}</div>
+							{#if settings.showCollection}
+								<div class="event-collection">{event.collection}</div>
+							{/if}
 						</div>
 						{#if isEventNow(event)}
 							<div class="status-indicator current-indicator">NOW</div>
@@ -152,7 +152,7 @@
 </div>
 
 <style>
-	.daily-agenda {
+	.agenda-widget {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -252,6 +252,7 @@
 		font-size: 1rem;
 		color: var(--text-secondary, #666);
 		line-height: 1.4;
+		margin-bottom: 0.25rem;
 	}
 
 	.event-collection {

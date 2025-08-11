@@ -11,30 +11,30 @@ export const calendarWidgetDefinition: WidgetDefinition = {
 		author: 'Dash It All',
 		category: 'calendar',
 		settings: {
-			calendarSource: {
+			viewType: {
 				type: 'select',
-				label: 'Calendar Source',
-				description: 'Select which calendar to display',
-				default: 'all',
+				label: 'View Type',
+				description: 'Calendar view layout',
+				default: 'week',
 				required: true,
 				options: [
-					{ value: 'all', label: 'All Calendars' }
-					// TODO: Dynamically populate from config
+					{ value: 'week', label: 'Week View' },
+					{ value: 'month', label: 'Month View' }
 				]
 			},
-			maxEvents: {
+			daysToShow: {
 				type: 'number',
-				label: 'Max Events',
-				description: 'Maximum number of events to display',
-				default: 10,
+				label: 'Days to Show',
+				description: 'Number of days to display (for week view)',
+				default: 3,
 				min: 1,
-				max: 50
+				max: 7
 			},
-			showPastEvents: {
+			showWeekends: {
 				type: 'boolean',
-				label: 'Show Past Events',
-				description: 'Include events that have already passed',
-				default: false
+				label: 'Show Weekends',
+				description: 'Include weekends in the calendar view',
+				default: true
 			}
 		}
 	},

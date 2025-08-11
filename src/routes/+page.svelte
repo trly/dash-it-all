@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import Clock from '$lib/components/clock.svelte';
-	import CalendarView from '$lib/components/calendar-view.svelte';
-	import DailyAgenda from '$lib/components/daily-agenda.svelte';
-	import { calendarEvents, startEventRefresh } from '$lib/stores/calendar-client.js';
+	import DashboardGrid from '$lib/components/dashboard-grid.svelte';
+	import { dashboardWidgets } from '$lib/stores/dashboard.js';
+	import { startEventRefresh } from '$lib/stores/calendar-client.js';
+	import '$lib/widgets/index.js'; // Initialize widget registry
 
 	let cleanup: (() => void) | null = null;
 
@@ -24,21 +24,7 @@
 </svelte:head>
 
 <div class="dashboard">
-	<header class="dashboard-header">
-		<div class="header-content">
-			<Clock />
-		</div>
-	</header>
-
-	<main class="dashboard-main">
-		<aside class="agenda-section">
-			<DailyAgenda events={$calendarEvents} />
-		</aside>
-
-		<section class="calendar-section">
-			<CalendarView events={$calendarEvents} viewType="week" daysToShow={3} />
-		</section>
-	</main>
+	<DashboardGrid widgets={$dashboardWidgets} />
 </div>
 
 <style>
@@ -65,53 +51,6 @@
 
 	.dashboard {
 		height: 100vh;
-		display: flex;
-		flex-direction: column;
 		overflow: hidden;
-	}
-
-	.dashboard-header {
-		background-color: var(--bg-primary);
-		border-bottom: 1px solid var(--border-color);
-		flex-shrink: 0;
-		padding: 0 1rem;
-	}
-
-	.header-content {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		max-width: 100%;
-	}
-
-	.dashboard-main {
-		flex: 1;
-		display: grid;
-		grid-template-columns: 2fr 1fr;
-		gap: 1rem;
-		padding: 1rem;
-		min-height: 0;
-	}
-
-	.calendar-section {
-		background-color: var(--bg-primary);
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.agenda-section {
-		display: flex;
-		flex-direction: column;
-		min-height: 0;
-	}
-
-	@media (max-width: 768px) {
-		.dashboard-main {
-			grid-template-columns: 1fr;
-			grid-template-rows: 2fr 1fr;
-		}
 	}
 </style>
