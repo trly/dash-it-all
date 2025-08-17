@@ -72,7 +72,23 @@
 
 	function isAllDayEvent(event: CalendarEvent): boolean {
 		// node-ical marks all day events with dateOnly property
-		return (event.start as Date & { dateOnly?: boolean })?.dateOnly === true;
+		const startDate = new Date(event.start);
+		const endDate = event.end ? new Date(event.end) : null;
+		
+		// Check for dateOnly property first
+		if ((event.start as Date & { dateOnly?: boolean })?.dateOnly === true) {
+			return true;
+		}
+		
+		// Fallback: check if times are exactly midnight to midnight (indicating all-day)
+		if (endDate) {
+			const isStartMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
+			const isEndMidnight = endDate.getHours() === 0 && endDate.getMinutes() === 0;
+			const isMultipleDays = endDate.getTime() - startDate.getTime() >= 24 * 60 * 60 * 1000;
+			return isStartMidnight && isEndMidnight && isMultipleDays;
+		}
+		
+		return false;
 	}
 
 	function formatDayHeader(date: Date): string {
@@ -137,6 +153,7 @@
 						<!-- All Day Events Section -->
 						{#if getAllDayEventsForDay(day).length > 0}
 							<div class="all-day-section">
+								<div class="all-day-label">All Day</div>
 								{#each getAllDayEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
 									<div
 										class="event all-day-event"
@@ -171,9 +188,9 @@
 <style>
 	.calendar-widget {
 		padding: 1rem;
-		background: white;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		background: var(--bg-primary);
+		border-radius: var(--radius-medium);
+		box-shadow: var(--shadow-light);
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -185,13 +202,15 @@
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 		padding-bottom: 0.5rem;
-		border-bottom: 1px solid #e5e7eb;
+		border-bottom: 1px solid var(--border-color);
+		color: var(--text-secondary);
 	}
 
 	.widget-header h3 {
 		margin: 0;
 		font-size: 1.1rem;
 		font-weight: 600;
+		color: var(--text-primary);
 	}
 
 	.calendar-view {
@@ -202,7 +221,7 @@
 	.calendar-grid {
 		display: grid;
 		gap: 1px;
-		background-color: var(--border-color, #e1e5e9);
+		background-color: var(--border-color);
 		height: 100%;
 		width: 100%;
 	}
@@ -217,7 +236,7 @@
 	}
 
 	.day-column {
-		background-color: white;
+		background-color: var(--bg-primary);
 		display: flex;
 		flex-direction: column;
 		min-height: 0;
@@ -226,10 +245,11 @@
 	.day-header {
 		padding: 0.5rem 0.25rem;
 		font-weight: 600;
-		font-size: 0.75rem;
-		border-bottom: 1px solid var(--border-color, #e1e5e9);
+		font-size: 2rem;
+		border-bottom: 1px solid var(--border-color);
 		text-align: center;
-		background-color: var(--bg-secondary, #f8f9fa);
+		background-color: var(--bg-secondary);
+		color: var(--text-primary);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -245,40 +265,49 @@
 	}
 
 	.event {
-		background-color: var(--bg-event, #f1f3f4);
-		border-radius: 3px;
+		background-color: var(--bg-event);
+		border-radius: var(--radius-small);
 		padding: 0.25rem;
-		border-left: 2px solid var(--color-primary, #4285f4);
+		border-left: 2px solid var(--color-primary);
 		font-size: 0.75rem;
 		line-height: 1.1;
 	}
 
 	.event-time {
 		font-weight: 600;
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 		font-size: 0.65rem;
 		margin-bottom: 0.125rem;
 	}
 
 	.event-title {
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 		margin-bottom: 0.0625rem;
 		font-weight: 500;
 	}
 
 	.event-location {
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 		font-size: 0.65rem;
 	}
 
 	.all-day-section {
-		border-bottom: 1px solid var(--border-color, #e1e5e9);
+		border-bottom: 1px solid var(--border-color);
 		margin-bottom: 0.25rem;
 		padding-bottom: 0.25rem;
 	}
 
+	.all-day-label {
+		font-size: 0.6rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		margin-bottom: 0.25rem;
+		letter-spacing: 0.5px;
+	}
+
 	.all-day-event {
-		background-color: var(--bg-all-day, #fff5e6);
+		background-color: var(--bg-event);
 		border-left-width: 3px;
 	}
 

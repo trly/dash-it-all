@@ -11,7 +11,7 @@
 	function getTodaysEvents(): CalendarEvent[] {
 		const now = $currentDate;
 		const targetDate = new Date();
-		
+
 		return $calendarEvents
 			.filter((event) => {
 				if (!event || !event.start) return false;
@@ -156,27 +156,28 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		background-color: white;
-		border-radius: 8px;
+		background-color: var(--bg-primary);
+		border-radius: var(--radius-medium);
 		overflow: hidden;
+		box-shadow: var(--shadow-light);
 	}
 
 	.agenda-header {
 		padding: 1.5rem;
-		background-color: var(--bg-secondary, #f8f9fa);
-		border-bottom: 1px solid var(--border-color, #e1e5e9);
+		background-color: var(--bg-secondary);
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	.agenda-header h2 {
 		margin: 0 0 0.5rem 0;
 		font-size: 3rem;
 		font-weight: 600;
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 	}
 
 	.event-count {
 		font-size: 2rem;
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 	}
 
 	.agenda-content {
@@ -188,7 +189,7 @@
 	.no-events {
 		text-align: center;
 		padding: 2rem;
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 	}
 
 	.events-list {
@@ -202,31 +203,31 @@
 		align-items: flex-start;
 		gap: 1rem;
 		padding: 1rem;
-		background-color: var(--bg-event, #f8f9fa);
-		border-radius: 8px;
-		border-left: 4px solid var(--color-primary, #4285f4);
+		background-color: var(--bg-event);
+		border-radius: var(--radius-medium);
+		border-left: 4px solid var(--color-primary);
 		position: relative;
 		transition: all 0.2s ease;
 	}
 
 	.event-item:hover {
-		background-color: var(--bg-event-hover, #e8f0fe);
+		background-color: var(--bg-event-hover);
 	}
 
 	.event-item.current {
-		background-color: var(--bg-current, #e8f5e8);
-		border-left-color: var(--color-success, #34a853);
+		background-color: var(--bg-current);
+		border-left-color: var(--color-success);
 	}
 
 	.event-item.upcoming {
-		background-color: var(--bg-upcoming, #fff3e0);
-		border-left-color: var(--color-warning, #fbbc04);
+		background-color: var(--bg-upcoming);
+		border-left-color: var(--color-warning);
 	}
 
 	.event-time {
 		font-weight: 600;
 		font-size: 1.125rem;
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 		white-space: nowrap;
 	}
 
@@ -238,26 +239,26 @@
 	.event-title {
 		font-weight: 500;
 		font-size: 1.25rem;
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 		margin-bottom: 0.25rem;
 	}
 
 	.event-location {
 		font-size: 1rem;
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 		margin-bottom: 0.25rem;
 	}
 
 	.event-description {
 		font-size: 1rem;
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 		line-height: 1.4;
 		margin-bottom: 0.25rem;
 	}
 
 	.event-collection {
 		font-size: 0.875rem;
-		color: var(--text-secondary, #666);
+		color: var(--text-tertiary);
 		font-weight: 500;
 		margin-top: 0.25rem;
 		opacity: 0.8;
@@ -267,7 +268,7 @@
 		font-size: 0.75rem;
 		font-weight: 700;
 		padding: 0.25rem 0.5rem;
-		border-radius: 12px;
+		border-radius: var(--radius-large);
 		text-align: center;
 		white-space: nowrap;
 		position: absolute;
@@ -276,12 +277,12 @@
 	}
 
 	.current-indicator {
-		background-color: var(--color-success, #34a853);
-		color: white;
+		background-color: var(--color-success);
+		color: var(--oc-white);
 	}
 
 	.upcoming-indicator {
-		background-color: var(--color-warning, #fbbc04);
-		color: var(--text-primary, #1a1a1a);
+		background-color: var(--color-warning);
+		color: var(--oc-gray-8);
 	}
 </style>

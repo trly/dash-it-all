@@ -23,7 +23,7 @@ const defaultWidgets: WidgetInstance[] = [
     name: 'Weekly Calendar',
     settings: {
       viewType: 'week',
-      daysToShow: 7,
+      daysToShow: 3,
       showWeekends: true
     },
     position: { x: 0, y: 0, width: 8, height: 8 }, // Left side: cols 1-8, rows 2-7

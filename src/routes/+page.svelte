@@ -6,6 +6,7 @@
 	import { showGrid } from '$lib/stores/grid-visibility.js';
 	import { Grid3x3, Grid2x2X } from 'lucide-svelte';
 	import '$lib/widgets/index.js'; // Initialize widget registry
+	import '../app.css';
 
 	let cleanup: (() => void) | null = null;
 
@@ -41,27 +42,6 @@
 </div>
 
 <style>
-	:global(body) {
-		margin: 0;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-		background-color: #f5f5f5;
-	}
-
-	:global(:root) {
-		--text-primary: #1a1a1a;
-		--text-secondary: #666;
-		--bg-primary: #ffffff;
-		--bg-secondary: #f8f9fa;
-		--bg-event: #f1f3f4;
-		--bg-event-hover: #e8f0fe;
-		--bg-current: #e8f5e8;
-		--bg-upcoming: #fff3e0;
-		--border-color: #e1e5e9;
-		--color-primary: #4285f4;
-		--color-success: #34a853;
-		--color-warning: #fbbc04;
-	}
-
 	.dashboard {
 		height: 100vh;
 		overflow: hidden;
@@ -73,9 +53,9 @@
 		top: 1rem;
 		right: 1rem;
 		z-index: 1000;
-		background: rgba(255, 255, 255, 0.9);
-		border: 1px solid var(--border-color, #e1e5e9);
-		border-radius: 8px;
+		background: var(--bg-primary);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-medium);
 		padding: 0.75rem;
 		cursor: pointer;
 		display: flex;
@@ -83,12 +63,14 @@
 		justify-content: center;
 		transition: all 0.2s ease;
 		backdrop-filter: blur(8px);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--shadow-light);
+		color: var(--text-secondary);
 	}
 
 	.grid-toggle:hover {
-		background: rgba(255, 255, 255, 1);
+		background: var(--bg-hover);
+		color: var(--color-primary);
 		transform: translateY(-1px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		box-shadow: var(--shadow-medium);
 	}
 </style>

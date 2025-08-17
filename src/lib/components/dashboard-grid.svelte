@@ -102,17 +102,17 @@
 	}
 
 	.grid-cell {
-		border: 1px solid rgba(59, 130, 246, 0.3);
-		border-right: 1px solid rgba(59, 130, 246, 0.15);
-		border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+		border: 1px solid var(--oc-blue-3);
+		border-right: 1px solid var(--oc-blue-1);
+		border-bottom: 1px solid var(--oc-blue-1);
 	}
 
 	.grid-cell:nth-child(12n) {
-		border-right: 1px solid rgba(59, 130, 246, 0.5);
+		border-right: 1px solid var(--oc-blue-4);
 	}
 
 	.grid-cell:nth-child(n+85) {
-		border-bottom: 1px solid rgba(59, 130, 246, 0.5);
+		border-bottom: 1px solid var(--oc-blue-4);
 	}
 
 	.show-grid .widget-container {

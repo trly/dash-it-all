@@ -72,14 +72,14 @@
 		font-size: clamp(1.5rem, 8vw, 4rem);
 		font-weight: 300;
 		font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-		color: var(--text-primary, #1a1a1a);
+		color: var(--text-primary);
 		line-height: 1;
 		white-space: nowrap;
 	}
 
 	.date {
 		font-size: clamp(0.75rem, 3vw, 1.25rem);
-		color: var(--text-secondary, #666);
+		color: var(--text-secondary);
 		margin-top: 0.25rem;
 		line-height: 1.2;
 	}

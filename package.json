@@ -38,6 +38,7 @@
 		"bits-ui": "^2.9.0",
 		"chokidar": "^4.0.3",
 		"lucide-svelte": "^0.535.0",
-		"node-ical": "^0.20.1"
+		"node-ical": "^0.20.1",
+		"open-color": "^1.9.1"
 	}
 }
