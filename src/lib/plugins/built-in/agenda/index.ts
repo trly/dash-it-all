@@ -1,6 +1,6 @@
 import type { PluginDefinition } from '$lib/types/plugin.js';
 import type { ComponentType, SvelteComponent } from 'svelte';
-import AgendaWidget from './AgendaWidget.svelte';
+import AgendaPlugin from './AgendaPlugin.svelte';
 
 export const agendaPluginDefinition: PluginDefinition = {
   config: {
@@ -29,5 +29,5 @@ export const agendaPluginDefinition: PluginDefinition = {
       }
     }
   },
-  component: AgendaWidget as unknown as ComponentType<SvelteComponent>
+  component: AgendaPlugin as unknown as ComponentType<SvelteComponent>
 };

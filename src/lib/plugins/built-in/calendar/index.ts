@@ -1,6 +1,6 @@
 import type { PluginDefinition } from '$lib/types/plugin.js';
 import type { ComponentType, SvelteComponent } from 'svelte';
-import CalendarWidget from './CalendarWidget.svelte';
+import CalendarPlugin from './CalendarPlugin.svelte';
 
 export const calendarPluginDefinition: PluginDefinition = {
   config: {
@@ -38,5 +38,5 @@ export const calendarPluginDefinition: PluginDefinition = {
       }
     }
   },
-  component: CalendarWidget as unknown as ComponentType<SvelteComponent>
+  component: CalendarPlugin as unknown as ComponentType<SvelteComponent>
 };
