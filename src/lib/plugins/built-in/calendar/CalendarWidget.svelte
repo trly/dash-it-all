@@ -4,6 +4,8 @@
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import { SvelteDate } from 'svelte/reactivity';
+	import EventItem from '$lib/components/events/EventItem.svelte';
+	import { isAllDayEvent, getEventKey } from '$lib/components/events/event-utils.js';
 
 	type Props = PluginProps;
 
@@ -70,26 +72,7 @@
 		return getEventsForDay(day).filter((event) => !isAllDayEvent(event));
 	}
 
-	function isAllDayEvent(event: CalendarEvent): boolean {
-		// node-ical marks all day events with dateOnly property
-		const startDate = new Date(event.start);
-		const endDate = event.end ? new Date(event.end) : null;
-		
-		// Check for dateOnly property first
-		if ((event.start as Date & { dateOnly?: boolean })?.dateOnly === true) {
-			return true;
-		}
-		
-		// Fallback: check if times are exactly midnight to midnight (indicating all-day)
-		if (endDate) {
-			const isStartMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
-			const isEndMidnight = endDate.getHours() === 0 && endDate.getMinutes() === 0;
-			const isMultipleDays = endDate.getTime() - startDate.getTime() >= 24 * 60 * 60 * 1000;
-			return isStartMidnight && isEndMidnight && isMultipleDays;
-		}
-		
-		return false;
-	}
+
 
 	function formatDayHeader(date: Date): string {
 		return date.toLocaleDateString('en-US', {
@@ -99,32 +82,7 @@
 		});
 	}
 
-	function formatTimeRange(event: CalendarEvent): string {
-		const start = new Date(event.start);
-		const end = event.end ? new Date(event.end) : null;
 
-		const startTime = start.toLocaleTimeString('en-US', {
-			hour: 'numeric',
-			minute: '2-digit',
-			hour12: true
-		});
-
-		if (end) {
-			const endTime = end.toLocaleTimeString('en-US', {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: true
-			});
-			return `${startTime} - ${endTime}`;
-		}
-
-		return startTime;
-	}
-
-	function getCollectionColor(collectionName: string): string {
-		const metadata = $calendarMetadata.get(collectionName);
-		return metadata?.color || '#4285f4';
-	}
 
 	const displayDays = $derived(getDaysToDisplay());
 	const viewType = $derived(settings.viewType as string || 'week');
@@ -154,29 +112,23 @@
 						{#if getAllDayEventsForDay(day).length > 0}
 							<div class="all-day-section">
 								<div class="all-day-label">All Day</div>
-								{#each getAllDayEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
-									<div
-										class="event all-day-event"
-										style="border-left-color: {getCollectionColor(event.collection)}"
-									>
-										<div class="event-title">{event.summary}</div>
-										{#if event.location}
-											<div class="event-location">{event.location}</div>
-										{/if}
-									</div>
+								{#each getAllDayEventsForDay(day) as event (getEventKey(event))}
+									<EventItem
+										{event}
+										mode="calendar"
+										showLocation={true}
+									/>
 								{/each}
 							</div>
 						{/if}
 
 						<!-- Timed Events Section -->
-						{#each getTimedEventsForDay(day) as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
-							<div class="event" style="border-left-color: {getCollectionColor(event.collection)}">
-								<div class="event-time">{formatTimeRange(event)}</div>
-								<div class="event-title">{event.summary}</div>
-								{#if event.location}
-									<div class="event-location">{event.location}</div>
-								{/if}
-							</div>
+						{#each getTimedEventsForDay(day) as event (getEventKey(event))}
+							<EventItem
+								{event}
+								mode="calendar"
+								showLocation={true}
+							/>
 						{/each}
 					</div>
 				</div>
@@ -264,32 +216,7 @@
 		gap: 0.125rem;
 	}
 
-	.event {
-		background-color: var(--bg-event);
-		border-radius: var(--radius-small);
-		padding: 0.25rem;
-		border-left: 2px solid var(--color-primary);
-		font-size: 0.75rem;
-		line-height: 1.1;
-	}
 
-	.event-time {
-		font-weight: 600;
-		color: var(--text-primary);
-		font-size: 0.65rem;
-		margin-bottom: 0.125rem;
-	}
-
-	.event-title {
-		color: var(--text-primary);
-		margin-bottom: 0.0625rem;
-		font-weight: 500;
-	}
-
-	.event-location {
-		color: var(--text-secondary);
-		font-size: 0.65rem;
-	}
 
 	.all-day-section {
 		border-bottom: 1px solid var(--border-color);
@@ -306,12 +233,5 @@
 		letter-spacing: 0.5px;
 	}
 
-	.all-day-event {
-		background-color: var(--bg-event);
-		border-left-width: 3px;
-	}
 
-	.all-day-event .event-title {
-		font-weight: 600;
-	}
 </style>

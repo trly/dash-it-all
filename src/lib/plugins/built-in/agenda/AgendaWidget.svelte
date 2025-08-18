@@ -3,6 +3,8 @@
 	import type { CalendarEvent } from '$lib/types';
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
+	import EventItem from '$lib/components/events/EventItem.svelte';
+	import { getEventKey } from '$lib/components/events/event-utils.js';
 
 	type Props = PluginProps;
 
@@ -43,51 +45,7 @@
 			});
 	}
 
-	function formatTime(date: Date): string {
-		return date.toLocaleTimeString('en-US', {
-			hour: 'numeric',
-			minute: '2-digit',
-			hour12: true
-		});
-	}
 
-	function formatTimeRange(event: CalendarEvent): string {
-		if (!event.start) return 'Invalid time';
-
-		try {
-			const start = new Date(event.start);
-			const end = event.end ? new Date(event.end) : null;
-
-			if (end && end.toDateString() === start.toDateString()) {
-				return `${formatTime(start)} - ${formatTime(end)}`;
-			}
-
-			return formatTime(start);
-		} catch {
-			return 'Invalid time';
-		}
-	}
-
-	function isEventNow(event: CalendarEvent): boolean {
-		const now = $currentDate;
-		const start = new Date(event.start);
-		const end = event.end ? new Date(event.end) : new Date(start.getTime() + 60 * 60 * 1000);
-
-		return now >= start && now <= end;
-	}
-
-	function isEventUpcoming(event: CalendarEvent): boolean {
-		const now = $currentDate;
-		const start = new Date(event.start);
-		const timeDiff = start.getTime() - now.getTime();
-
-		return timeDiff > 0 && timeDiff <= 30 * 60 * 1000;
-	}
-
-	function getCollectionColor(collectionName: string): string {
-		const metadata = $calendarMetadata.get(collectionName);
-		return metadata?.color || '#4285f4';
-	}
 
 	function formatDateHeader(date: Date): string {
 		return date.toLocaleDateString('en-US', {
@@ -117,34 +75,15 @@
 			</div>
 		{:else}
 			<div class="events-list">
-				{#each todaysEvents as event (event.id || `${event.collection}-${event.summary}-${event.start}`)}
-					<div
-						class="event-item"
-						class:current={isEventNow(event)}
-						class:upcoming={isEventUpcoming(event)}
-						style="border-left-color: {getCollectionColor(event.collection)}"
-					>
-						<div class="event-time">
-							{formatTimeRange(event)}
-						</div>
-						<div class="event-details">
-							<div class="event-title">{event.summary || 'Untitled Event'}</div>
-							{#if settings.showLocation && event.location}
-								<div class="event-location">📍 {event.location}</div>
-							{/if}
-							{#if event.description}
-								<div class="event-description">{event.description}</div>
-							{/if}
-							{#if settings.showCollection}
-								<div class="event-collection">{event.collection}</div>
-							{/if}
-						</div>
-						{#if isEventNow(event)}
-							<div class="status-indicator current-indicator">NOW</div>
-						{:else if isEventUpcoming(event)}
-							<div class="status-indicator upcoming-indicator">SOON</div>
-						{/if}
-					</div>
+				{#each todaysEvents as event (getEventKey(event))}
+					<EventItem
+						{event}
+						mode="agenda"
+						showLocation={settings.showLocation as boolean}
+						showDescription={true}
+						showCollection={settings.showCollection as boolean}
+						showStatusIndicators={true}
+					/>
 				{/each}
 			</div>
 		{/if}
@@ -198,91 +137,5 @@
 		gap: 0.75rem;
 	}
 
-	.event-item {
-		display: flex;
-		align-items: flex-start;
-		gap: 1rem;
-		padding: 1rem;
-		background-color: var(--bg-event);
-		border-radius: var(--radius-medium);
-		border-left: 4px solid var(--color-primary);
-		position: relative;
-		transition: all 0.2s ease;
-	}
 
-	.event-item:hover {
-		background-color: var(--bg-event-hover);
-	}
-
-	.event-item.current {
-		background-color: var(--bg-current);
-		border-left-color: var(--color-success);
-	}
-
-	.event-item.upcoming {
-		background-color: var(--bg-upcoming);
-		border-left-color: var(--color-warning);
-	}
-
-	.event-time {
-		font-weight: 600;
-		font-size: 1.125rem;
-		color: var(--text-primary);
-		white-space: nowrap;
-	}
-
-	.event-details {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.event-title {
-		font-weight: 500;
-		font-size: 1.25rem;
-		color: var(--text-primary);
-		margin-bottom: 0.25rem;
-	}
-
-	.event-location {
-		font-size: 1rem;
-		color: var(--text-secondary);
-		margin-bottom: 0.25rem;
-	}
-
-	.event-description {
-		font-size: 1rem;
-		color: var(--text-secondary);
-		line-height: 1.4;
-		margin-bottom: 0.25rem;
-	}
-
-	.event-collection {
-		font-size: 0.875rem;
-		color: var(--text-tertiary);
-		font-weight: 500;
-		margin-top: 0.25rem;
-		opacity: 0.8;
-	}
-
-	.status-indicator {
-		font-size: 0.75rem;
-		font-weight: 700;
-		padding: 0.25rem 0.5rem;
-		border-radius: var(--radius-large);
-		text-align: center;
-		white-space: nowrap;
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
-	}
-
-	.current-indicator {
-		background-color: var(--color-success);
-		color: var(--oc-white);
-	}
-
-	.upcoming-indicator {
-		background-color: var(--color-warning);
-		color: var(--oc-gray-8);
-	}
 </style>
