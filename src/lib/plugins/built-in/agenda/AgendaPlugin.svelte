@@ -4,7 +4,7 @@
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import EventItem from '$lib/components/events/EventItem.svelte';
-	import { getEventKey } from '$lib/components/events/event-utils.js';
+	import { getEventKey, isAllDayEvent } from '$lib/components/events/event-utils.js';
 
 	type Props = PluginProps;
 
@@ -45,6 +45,13 @@
 			});
 	}
 
+	function getAllDayEventsForToday(): CalendarEvent[] {
+		return getTodaysEvents().filter((event) => isAllDayEvent(event));
+	}
+
+	function getTimedEventsForToday(): CalendarEvent[] {
+		return getTodaysEvents().filter((event) => !isAllDayEvent(event));
+	}
 
 
 	function formatDateHeader(date: Date): string {
@@ -57,6 +64,8 @@
 	}
 
 	const todaysEvents = $derived(getTodaysEvents());
+	const allDayEvents = $derived(getAllDayEventsForToday());
+	const timedEvents = $derived(getTimedEventsForToday());
 </script>
 
 <div class="agenda-widget">
@@ -75,7 +84,25 @@
 			</div>
 		{:else}
 			<div class="events-list">
-				{#each todaysEvents as event (getEventKey(event))}
+				<!-- All Day Events Section -->
+				{#if allDayEvents.length > 0}
+					<div class="all-day-section">
+						<div class="all-day-label">All Day</div>
+						{#each allDayEvents as event (getEventKey(event))}
+							<EventItem
+								{event}
+								mode="agenda"
+								showLocation={settings.showLocation as boolean}
+								showDescription={true}
+								showCollection={settings.showCollection as boolean}
+								showStatusIndicators={true}
+							/>
+						{/each}
+					</div>
+				{/if}
+
+				<!-- Timed Events Section -->
+				{#each timedEvents as event (getEventKey(event))}
 					<EventItem
 						{event}
 						mode="agenda"
@@ -137,5 +164,18 @@
 		gap: 0.75rem;
 	}
 
+	.all-day-section {
+		border-bottom: 1px solid var(--border-color);
+		margin-bottom: 0.75rem;
+		padding-bottom: 0.75rem;
+	}
 
+	.all-day-label {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		margin-bottom: 0.5rem;
+		letter-spacing: 0.5px;
+	}
 </style>

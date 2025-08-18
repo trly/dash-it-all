@@ -36,14 +36,16 @@
 	class:calendar-mode={mode === 'calendar'}
 	class:agenda-mode={mode === 'agenda'}
 	class:all-day={isAllDay}
-	class:current={isCurrentEvent}
-	class:upcoming={isUpcomingEvent}
+	class:current={isCurrentEvent && !isAllDay}
+	class:upcoming={isUpcomingEvent && !isAllDay}
 	style="border-left-color: {getCollectionColor(event.collection)}"
 >
 	{#if mode === 'agenda'}
-		<div class="event-time">
-			{formatTimeRange(event)}
-		</div>
+		{#if !isAllDay}
+			<div class="event-time">
+				{formatTimeRange(event)}
+			</div>
+		{/if}
 		<div class="event-details">
 			<div class="event-title">{event.summary || 'Untitled Event'}</div>
 			{#if showLocation && event.location}
@@ -56,7 +58,7 @@
 				<div class="event-collection">{event.collection}</div>
 			{/if}
 		</div>
-		{#if showStatusIndicators}
+		{#if showStatusIndicators && !isAllDay}
 			{#if isCurrentEvent}
 				<div class="status-indicator current-indicator">NOW</div>
 			{:else if isUpcomingEvent}
