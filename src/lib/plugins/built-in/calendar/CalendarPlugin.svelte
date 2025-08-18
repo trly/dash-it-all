@@ -236,6 +236,7 @@
 		text-transform: uppercase;
 		margin-bottom: 0.25rem;
 		letter-spacing: 0.5px;
+		text-align: left;
 	}
 
 

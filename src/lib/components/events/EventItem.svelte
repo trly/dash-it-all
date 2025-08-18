@@ -2,6 +2,7 @@
 	import type { CalendarEvent } from '$lib/types';
 	import { calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import { formatTimeRange, isEventNow, isEventUpcoming, isAllDayEvent } from './event-utils.js';
+	import EventDetailsPopover from './EventDetailsPopover.svelte';
 
 	interface Props {
 		event: CalendarEvent;
@@ -31,49 +32,51 @@
 	const isUpcomingEvent = $derived(isEventUpcoming(event, $currentDate));
 </script>
 
-<div
-	class="event-item"
-	class:calendar-mode={mode === 'calendar'}
-	class:agenda-mode={mode === 'agenda'}
-	class:all-day={isAllDay}
-	class:current={isCurrentEvent && !isAllDay}
-	class:upcoming={isUpcomingEvent && !isAllDay}
-	style="border-left-color: {getCollectionColor(event.collection)}"
->
-	{#if mode === 'agenda'}
-		{#if !isAllDay}
-			<div class="event-time">
-				{formatTimeRange(event)}
-			</div>
-		{/if}
-		<div class="event-title">{event.summary || 'Untitled Event'}</div>
-		{#if showLocation && event.location}
-			<div class="event-location">📍 {event.location}</div>
-		{/if}
-		{#if showDescription && event.description}
-			<div class="event-description">{event.description}</div>
-		{/if}
-		{#if showCollection}
-			<div class="event-collection">{event.collection}</div>
-		{/if}
-		{#if showStatusIndicators && !isAllDay}
-			{#if isCurrentEvent}
-				<div class="status-indicator current-indicator">NOW</div>
-			{:else if isUpcomingEvent}
-				<div class="status-indicator upcoming-indicator">SOON</div>
+<EventDetailsPopover {event}>
+	<div
+		class="event-item"
+		class:calendar-mode={mode === 'calendar'}
+		class:agenda-mode={mode === 'agenda'}
+		class:all-day={isAllDay}
+		class:current={isCurrentEvent && !isAllDay}
+		class:upcoming={isUpcomingEvent && !isAllDay}
+		style="border-left-color: {getCollectionColor(event.collection)}"
+	>
+		{#if mode === 'agenda'}
+			{#if !isAllDay}
+				<div class="event-time">
+					{formatTimeRange(event)}
+				</div>
+			{/if}
+			<div class="event-title">{event.summary || 'Untitled Event'}</div>
+			{#if showLocation && event.location}
+				<div class="event-location">📍 {event.location}</div>
+			{/if}
+			{#if showDescription && event.description}
+				<div class="event-description">{event.description}</div>
+			{/if}
+			{#if showCollection}
+				<div class="event-collection">{event.collection}</div>
+			{/if}
+			{#if showStatusIndicators && !isAllDay}
+				{#if isCurrentEvent}
+					<div class="status-indicator current-indicator">NOW</div>
+				{:else if isUpcomingEvent}
+					<div class="status-indicator upcoming-indicator">SOON</div>
+				{/if}
+			{/if}
+		{:else}
+			<!-- Calendar mode -->
+			{#if !isAllDay}
+				<div class="event-time">{formatTimeRange(event)}</div>
+			{/if}
+			<div class="event-title">{event.summary}</div>
+			{#if showLocation && event.location}
+				<div class="event-location">{event.location}</div>
 			{/if}
 		{/if}
-	{:else}
-		<!-- Calendar mode -->
-		{#if !isAllDay}
-			<div class="event-time">{formatTimeRange(event)}</div>
-		{/if}
-		<div class="event-title">{event.summary}</div>
-		{#if showLocation && event.location}
-			<div class="event-location">{event.location}</div>
-		{/if}
-	{/if}
-</div>
+	</div>
+</EventDetailsPopover>
 
 <style>
 	.event-item {
@@ -81,6 +84,11 @@
 		border-radius: var(--radius-small);
 		border-left: 6px solid var(--color-primary);
 		transition: all 0.2s ease;
+		cursor: pointer;
+	}
+	
+	.event-item:hover {
+		background-color: var(--bg-event-hover);
 	}
 
 	/* Calendar mode styles */
@@ -95,18 +103,21 @@
 		color: var(--text-primary);
 		font-size: 1rem;
 		margin-bottom: 0.25rem;
+		text-align: left;
 	}
 
 	.calendar-mode .event-title {
 		color: var(--text-primary);
 		margin-bottom: 0.125rem;
 		font-weight: 600;
+		text-align: left;
 	}
 
 	.calendar-mode .event-location {
 		color: var(--text-secondary);
 		font-size: 0.9rem;
 		font-weight: 500;
+		text-align: left;
 	}
 
 	.calendar-mode.all-day {
@@ -146,6 +157,7 @@
 		font-size: 1.5rem;
 		color: var(--text-primary);
 		white-space: nowrap;
+		text-align: left;
 	}
 
 	.agenda-mode .event-title {
@@ -153,6 +165,7 @@
 		font-size: 1.75rem;
 		color: var(--text-primary);
 		margin-bottom: 0.5rem;
+		text-align: left;
 	}
 
 	.agenda-mode .event-location {
@@ -160,6 +173,7 @@
 		color: var(--text-secondary);
 		margin-bottom: 0.5rem;
 		font-weight: 500;
+		text-align: left;
 	}
 
 	.event-description {
@@ -167,6 +181,7 @@
 		color: var(--text-secondary);
 		line-height: 1.4;
 		margin-bottom: 0.5rem;
+		text-align: left;
 	}
 
 	.event-collection {
