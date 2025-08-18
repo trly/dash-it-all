@@ -27,6 +27,8 @@ export interface VdirCollectionConfig {
 
 export interface AppConfig {
 	vdirRoots: string[]; // Array of root directories containing vdir collections
+	notificationCollections?: string[]; // Array of collection names to show notifications for
+	notificationMessage?: string; // Custom message for in-progress notifications
 	refreshInterval: number;
 	watchFiles: boolean;
 	server?: {

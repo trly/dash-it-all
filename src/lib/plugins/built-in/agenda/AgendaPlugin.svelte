@@ -4,11 +4,17 @@
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 	import EventItem from '$lib/components/events/EventItem.svelte';
-	import { getEventKey, isAllDayEvent } from '$lib/components/events/event-utils.js';
+	import { getEventKey, isAllDayEvent, isEventNow } from '$lib/components/events/event-utils.js';
+	import { appConfig, loadAppConfig } from '$lib/stores/config.js';
+	import { onMount } from 'svelte';
 
 	type Props = PluginProps;
 
 	let { instance, settings }: Props = $props();
+
+	onMount(async () => {
+		await loadAppConfig();
+	});
 
 	function getTodaysEvents(): CalendarEvent[] {
 		const now = $currentDate;
@@ -53,6 +59,17 @@
 		return getTodaysEvents().filter((event) => !isAllDayEvent(event));
 	}
 
+	function getInProgressNotificationEvents(): CalendarEvent[] {
+		const notificationCollections = $appConfig?.notificationCollections || [];
+
+		if (notificationCollections.length === 0) return [];
+
+		return $calendarEvents.filter((event) => {
+			if (!event || !event.start || isAllDayEvent(event)) return false;
+			if (!notificationCollections.includes(event.collection)) return false;
+			return isEventNow(event, $currentDate);
+		});
+	}
 
 	function formatDateHeader(date: Date): string {
 		return date.toLocaleDateString('en-US', {
@@ -66,11 +83,19 @@
 	const todaysEvents = $derived(getTodaysEvents());
 	const allDayEvents = $derived(getAllDayEventsForToday());
 	const timedEvents = $derived(getTimedEventsForToday());
+	const inProgressNotifications = $derived(getInProgressNotificationEvents());
 </script>
 
 <div class="agenda-widget">
 	<div class="agenda-header">
 		<h2>{formatDateHeader(new Date())}</h2>
+		{#if inProgressNotifications.length > 0}
+			<div class="notification-pill pulse">
+				<span>
+					{$appConfig?.notificationMessage || 'Meeting in progress'}
+				</span>
+			</div>
+		{/if}
 	</div>
 
 	<div class="agenda-content">
@@ -137,8 +162,6 @@
 		color: var(--text-primary);
 	}
 
-
-
 	.agenda-content {
 		flex: 1;
 		overflow-y: auto;
@@ -170,5 +193,36 @@
 		text-transform: uppercase;
 		margin-bottom: 0.25rem;
 		letter-spacing: 0.5px;
+	}
+
+	.notification-pill {
+		background-color: #ffe3e3; /* light red background */
+		color: #c92a2a; /* open-color red-9 for text */
+		padding: 0.5rem 1rem;
+		border-radius: 9999px; /* full rounded pill */
+		display: block;
+		width: 100%;
+		text-align: center;
+		font-weight: 600;
+		font-size: 3rem; /* match header font size */
+		border: 2px solid #c92a2a;
+		margin-top: 0.5rem;
+		box-sizing: border-box;
+	}
+
+	.pulse {
+		animation: pulse 4s infinite;
+	}
+
+	@keyframes pulse {
+		0% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.7;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 </style>
