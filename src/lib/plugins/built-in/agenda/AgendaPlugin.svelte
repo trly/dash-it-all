@@ -88,10 +88,10 @@
 							<EventItem
 								{event}
 								mode="agenda"
-								showLocation={true}
-								showDescription={true}
+								showLocation={false}
+								showDescription={false}
 								showCollection={false}
-								showStatusIndicators={true}
+								showStatusIndicators={false}
 							/>
 						{/each}
 					</div>
@@ -102,10 +102,10 @@
 					<EventItem
 						{event}
 						mode="agenda"
-						showLocation={true}
-						showDescription={true}
+						showLocation={false}
+						showDescription={false}
 						showCollection={false}
-						showStatusIndicators={true}
+						showStatusIndicators={false}
 					/>
 				{/each}
 			</div>

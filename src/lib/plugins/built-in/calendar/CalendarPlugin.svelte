@@ -58,10 +58,18 @@
 	}
 
 	function getEventsForDay(day: Date): CalendarEvent[] {
-		return $calendarEvents.filter((event) => {
-			const eventDate = new Date(event.start);
-			return eventDate.toDateString() === day.toDateString();
-		});
+		return $calendarEvents
+			.filter((event) => {
+				const eventDate = new Date(event.start);
+				return eventDate.toDateString() === day.toDateString();
+			})
+			.sort((a, b) => {
+				try {
+					return new Date(a.start).getTime() - new Date(b.start).getTime();
+				} catch {
+					return 0;
+				}
+			});
 	}
 
 	function getAllDayEventsForDay(day: Date): CalendarEvent[] {
