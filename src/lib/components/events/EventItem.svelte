@@ -46,18 +46,16 @@
 				{formatTimeRange(event)}
 			</div>
 		{/if}
-		<div class="event-details">
-			<div class="event-title">{event.summary || 'Untitled Event'}</div>
-			{#if showLocation && event.location}
-				<div class="event-location">📍 {event.location}</div>
-			{/if}
-			{#if showDescription && event.description}
-				<div class="event-description">{event.description}</div>
-			{/if}
-			{#if showCollection}
-				<div class="event-collection">{event.collection}</div>
-			{/if}
-		</div>
+		<div class="event-title">{event.summary || 'Untitled Event'}</div>
+		{#if showLocation && event.location}
+			<div class="event-location">📍 {event.location}</div>
+		{/if}
+		{#if showDescription && event.description}
+			<div class="event-description">{event.description}</div>
+		{/if}
+		{#if showCollection}
+			<div class="event-collection">{event.collection}</div>
+		{/if}
 		{#if showStatusIndicators && !isAllDay}
 			{#if isCurrentEvent}
 				<div class="status-indicator current-indicator">NOW</div>
@@ -87,27 +85,28 @@
 
 	/* Calendar mode styles */
 	.calendar-mode {
-		padding: 0.25rem;
-		font-size: 0.75rem;
-		line-height: 1.1;
+		padding: 0.5rem;
+		font-size: 1.1rem;
+		line-height: 1.2;
 	}
 
 	.calendar-mode .event-time {
-		font-weight: 600;
+		font-weight: 700;
 		color: var(--text-primary);
-		font-size: 0.65rem;
-		margin-bottom: 0.125rem;
+		font-size: 1rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.calendar-mode .event-title {
 		color: var(--text-primary);
-		margin-bottom: 0.0625rem;
-		font-weight: 500;
+		margin-bottom: 0.125rem;
+		font-weight: 600;
 	}
 
 	.calendar-mode .event-location {
 		color: var(--text-secondary);
-		font-size: 0.65rem;
+		font-size: 0.9rem;
+		font-weight: 500;
 	}
 
 	.calendar-mode.all-day {
@@ -121,9 +120,9 @@
 	/* Agenda mode styles */
 	.agenda-mode {
 		display: flex;
-		align-items: flex-start;
-		gap: 1rem;
-		padding: 1rem;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.5rem;
 		border-left-width: 4px;
 		position: relative;
 	}
@@ -143,42 +142,38 @@
 	}
 
 	.agenda-mode .event-time {
-		font-weight: 600;
-		font-size: 1.125rem;
+		font-weight: 700;
+		font-size: 1.5rem;
 		color: var(--text-primary);
 		white-space: nowrap;
 	}
 
-	.event-details {
-		flex: 1;
-		min-width: 0;
-	}
-
 	.agenda-mode .event-title {
-		font-weight: 500;
-		font-size: 1.25rem;
+		font-weight: 600;
+		font-size: 1.75rem;
 		color: var(--text-primary);
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.agenda-mode .event-location {
-		font-size: 1rem;
+		font-size: 1.25rem;
 		color: var(--text-secondary);
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.5rem;
+		font-weight: 500;
 	}
 
 	.event-description {
-		font-size: 1rem;
+		font-size: 1.125rem;
 		color: var(--text-secondary);
 		line-height: 1.4;
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.event-collection {
-		font-size: 0.875rem;
+		font-size: 1rem;
 		color: var(--text-tertiary);
 		font-weight: 500;
-		margin-top: 0.25rem;
+		margin-top: 0.5rem;
 		opacity: 0.8;
 	}
 

@@ -90,11 +90,6 @@
 </script>
 
 <div class="calendar-widget">
-	<div class="widget-header">
-		<Calendar size={20} />
-		<h3>{instance.name}</h3>
-	</div>
-
 	<div
 		class="calendar-view"
 		style="--days-to-show: {daysToShow}"
@@ -116,7 +111,8 @@
 									<EventItem
 										{event}
 										mode="calendar"
-										showLocation={true}
+										showLocation={false}
+										showCollection={false}
 									/>
 								{/each}
 							</div>
@@ -127,7 +123,8 @@
 							<EventItem
 								{event}
 								mode="calendar"
-								showLocation={true}
+								showLocation={false}
+								showCollection={false}
 							/>
 						{/each}
 					</div>

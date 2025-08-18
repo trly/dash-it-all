@@ -92,9 +92,9 @@
 							<EventItem
 								{event}
 								mode="agenda"
-								showLocation={settings.showLocation as boolean}
+								showLocation={true}
 								showDescription={true}
-								showCollection={settings.showCollection as boolean}
+								showCollection={false}
 								showStatusIndicators={true}
 							/>
 						{/each}
@@ -106,9 +106,9 @@
 					<EventItem
 						{event}
 						mode="agenda"
-						showLocation={settings.showLocation as boolean}
+						showLocation={true}
 						showDescription={true}
-						showCollection={settings.showCollection as boolean}
+						showCollection={false}
 						showStatusIndicators={true}
 					/>
 				{/each}
