@@ -7,20 +7,20 @@
 	--text-tertiary: var(--oc-gray-5);
 	
 	--bg-primary: var(--oc-white);
-	--bg-secondary: var(--oc-gray-0);
-	--bg-tertiary: var(--oc-gray-1);
-	--bg-hover: var(--oc-gray-2);
+	--bg-secondary: var(--oc-violet-0);
+	--bg-tertiary: var(--oc-violet-1);
+	--bg-hover: var(--oc-violet-2);
 	
-	--bg-event: var(--oc-gray-1);
-	--bg-event-hover: var(--oc-blue-0);
+	--bg-event: var(--oc-violet-1);
+	--bg-event-hover: var(--oc-violet-3);
 	--bg-current: var(--oc-green-0);
 	--bg-upcoming: var(--oc-orange-0);
 	
 	--border-color: var(--oc-gray-3);
 	--border-light: var(--oc-gray-2);
 	
-	--color-primary: var(--oc-blue-6);
-	--color-primary-hover: var(--oc-blue-7);
+	--color-primary: var(--oc-violet-6);
+	--color-primary-hover: var(--oc-violet-7);
 	--color-success: var(--oc-green-6);
 	--color-warning: var(--oc-orange-6);
 	--color-error: var(--oc-red-6);

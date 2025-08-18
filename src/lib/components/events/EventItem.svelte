@@ -79,7 +79,7 @@
 	.event-item {
 		background-color: var(--bg-event);
 		border-radius: var(--radius-small);
-		border-left: 2px solid var(--color-primary);
+		border-left: 6px solid var(--color-primary);
 		transition: all 0.2s ease;
 	}
 
@@ -110,7 +110,7 @@
 	}
 
 	.calendar-mode.all-day {
-		border-left-width: 3px;
+		border-left-width: 8px;
 	}
 
 	.calendar-mode.all-day .event-title {
@@ -123,7 +123,7 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		padding: 1.5rem;
-		border-left-width: 4px;
+		border-left-width: 10px;
 		position: relative;
 	}
 
