@@ -71,10 +71,6 @@
 <div class="agenda-widget">
 	<div class="agenda-header">
 		<h2>{formatDateHeader(new Date())}</h2>
-		<div class="event-count">
-			{todaysEvents.length}
-			{todaysEvents.length === 1 ? 'event' : 'events'}
-		</div>
 	</div>
 
 	<div class="agenda-content">
@@ -141,15 +137,12 @@
 		color: var(--text-primary);
 	}
 
-	.event-count {
-		font-size: 2rem;
-		color: var(--text-secondary);
-	}
+
 
 	.agenda-content {
 		flex: 1;
 		overflow-y: auto;
-		padding: 1rem;
+		padding: 0.25rem;
 	}
 
 	.no-events {
@@ -161,13 +154,13 @@
 	.events-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: 0.125rem;
 	}
 
 	.all-day-section {
 		border-bottom: 1px solid var(--border-color);
-		margin-bottom: 0.75rem;
-		padding-bottom: 0.75rem;
+		margin-bottom: 0.25rem;
+		padding-bottom: 0.25rem;
 	}
 
 	.all-day-label {
@@ -175,7 +168,7 @@
 		font-weight: 600;
 		color: var(--text-secondary);
 		text-transform: uppercase;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.25rem;
 		letter-spacing: 0.5px;
 	}
 </style>
