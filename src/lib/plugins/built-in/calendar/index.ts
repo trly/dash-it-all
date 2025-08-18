@@ -1,8 +1,8 @@
-import type { WidgetDefinition } from '$lib/types/widget.js';
+import type { PluginDefinition } from '$lib/types/plugin.js';
 import type { ComponentType, SvelteComponent } from 'svelte';
 import CalendarWidget from './CalendarWidget.svelte';
 
-export const calendarWidgetDefinition: WidgetDefinition = {
+export const calendarPluginDefinition: PluginDefinition = {
   config: {
     id: 'calendar',
     name: 'Calendar',

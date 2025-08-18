@@ -1,8 +1,8 @@
-import type { WidgetDefinition } from '$lib/types/widget.js';
+import type { PluginDefinition } from '$lib/types/plugin.js';
 import type { ComponentType, SvelteComponent } from 'svelte';
 import AgendaWidget from './AgendaWidget.svelte';
 
-export const agendaWidgetDefinition: WidgetDefinition = {
+export const agendaPluginDefinition: PluginDefinition = {
   config: {
     id: 'agenda',
     name: 'Daily Agenda',

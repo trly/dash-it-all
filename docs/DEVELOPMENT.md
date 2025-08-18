@@ -33,15 +33,15 @@
 ```
 src/
 ├── lib/
-│   ├── widgets/
+│   ├── plugins/
 │   │   ├── built-in/
-│   │   │   ├── clock/           # Clock widget
-│   │   │   ├── calendar/        # Calendar widget
-│   │   │   └── index.ts         # Built-in widget registration
+│   │   │   ├── clock/           # Clock plugin
+│   │   │   ├── calendar/        # Calendar plugin
+│   │   │   └── index.ts         # Built-in plugin registration
 │   │   ├── types/
-│   │   │   └── widget.ts        # Widget type definitions
-│   │   ├── registry.ts          # Widget registry system
-│   │   └── index.ts             # Widget system exports
+│   │   │   └── plugin.ts        # Plugin type definitions
+│   │   ├── registry.ts          # Plugin registry system
+│   │   └── index.ts             # Plugin system exports
 │   ├── stores/                  # Svelte stores
 │   ├── types.ts                 # Core type definitions
 │   ├── config.ts                # Configuration management
@@ -54,81 +54,81 @@ src/
 └── app.d.ts                     # App type declarations
 ```
 
-## Widget Development
+## Plugin Development
 
-### Widget Architecture
+### Plugin Architecture
 
-Widgets are self-contained components that can be added to the dashboard. The system uses a registry pattern for widget management.
+Plugins are self-contained components that can be added to the dashboard. The system uses a registry pattern for plugin management.
 
-### Creating a Widget
+### Creating a Plugin
 
-1. **Define Widget Types** (`src/lib/types/widget.ts`):
+1. **Define Plugin Types** (`src/lib/types/plugin.ts`):
 
 ```typescript
-export interface WidgetConfig {
+export interface PluginConfig {
 	id: string;
 	name: string;
 	category: string;
 	description: string;
 }
 
-export interface WidgetDefinition {
-	config: WidgetConfig;
+export interface PluginDefinition {
+	config: PluginConfig;
 	component: ComponentType;
 }
 ```
 
-2. **Create Widget Component**:
+2. **Create Plugin Component**:
 
 ```svelte
-<!-- MyWidget.svelte -->
+<!-- MyPlugin.svelte -->
 <script lang="ts">
-	// Widget logic here
+	// Plugin logic here
 </script>
 
-<div class="widget">
-	<!-- Widget UI here -->
+<div class="plugin">
+	<!-- Plugin UI here -->
 </div>
 
 <style>
-	.widget {
-		/* Widget styling */
+	.plugin {
+		/* Plugin styling */
 	}
 </style>
 ```
 
-3. **Register Widget**:
+3. **Register Plugin**:
 
 ```typescript
-import { widgetRegistry } from '$lib/widgets/registry.js';
-import MyWidget from './MyWidget.svelte';
+import { pluginRegistry } from '$lib/plugins/registry.js';
+import MyPlugin from './MyPlugin.svelte';
 
-const config: WidgetConfig = {
-	id: 'my-widget',
-	name: 'My Widget',
+const config: PluginConfig = {
+	id: 'my-plugin',
+	name: 'My Plugin',
 	category: 'utility',
-	description: 'Custom widget description'
+	description: 'Custom plugin description'
 };
 
-widgetRegistry.register({
+pluginRegistry.register({
 	config,
-	component: MyWidget
+	component: MyPlugin
 });
 ```
 
-### Built-in Widgets
+### Built-in Plugins
 
-#### Clock Widget
+#### Clock Plugin
 
 - Displays current time and date
 - Auto-updates every second
-- Located in `src/lib/widgets/built-in/clock/`
+- Located in `src/lib/plugins/built-in/clock/`
 
-#### Calendar Widget
+#### Calendar Plugin
 
 - Shows upcoming events from vdir collections
 - Supports multiple calendar sources
-- Located in `src/lib/widgets/built-in/calendar/`
+- Located in `src/lib/plugins/built-in/calendar/`
 
 ## Calendar System
 

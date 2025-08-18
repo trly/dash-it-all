@@ -1,6 +1,6 @@
 import type { ComponentType, SvelteComponent } from 'svelte';
 
-export interface WidgetConfig {
+export interface PluginConfig {
 	id: string;
 	name: string;
 	description?: string;
@@ -11,10 +11,10 @@ export interface WidgetConfig {
 		width?: number;
 		height?: number;
 	};
-	settings?: Record<string, WidgetSettingDefinition>;
+	settings?: Record<string, PluginSettingDefinition>;
 }
 
-export interface WidgetSettingDefinition {
+export interface PluginSettingDefinition {
 	type: 'string' | 'number' | 'boolean' | 'select' | 'multiselect';
 	label: string;
 	description?: string;
@@ -25,9 +25,9 @@ export interface WidgetSettingDefinition {
 	max?: number; // For number type
 }
 
-export interface WidgetInstance {
+export interface PluginInstance {
 	id: string;
-	widgetId: string;
+	pluginId: string;
 	name: string;
 	settings: Record<string, unknown>;
 	position: {
@@ -39,12 +39,12 @@ export interface WidgetInstance {
 	enabled: boolean;
 }
 
-export interface WidgetDefinition {
-	config: WidgetConfig;
+export interface PluginDefinition {
+	config: PluginConfig;
 	component: ComponentType<SvelteComponent>;
 }
 
-export interface WidgetProps {
-	instance: WidgetInstance;
+export interface PluginProps {
+	instance: PluginInstance;
 	settings: Record<string, unknown>;
 }

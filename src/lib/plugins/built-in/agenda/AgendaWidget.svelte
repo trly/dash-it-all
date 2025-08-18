@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { WidgetProps } from '$lib/types/widget.js';
+	import type { PluginProps } from '$lib/types/plugin.js';
 	import type { CalendarEvent } from '$lib/types';
 	import { Calendar } from 'lucide-svelte';
 	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
 
-	type Props = WidgetProps;
+	type Props = PluginProps;
 
 	let { instance, settings }: Props = $props();
 

@@ -1,8 +1,8 @@
-import type { WidgetDefinition } from '$lib/types/widget.js';
+import type { PluginDefinition } from '$lib/types/plugin.js';
 import type { ComponentType, SvelteComponent } from 'svelte';
 import ClockWidget from './ClockWidget.svelte';
 
-export const clockWidgetDefinition: WidgetDefinition = {
+export const clockPluginDefinition: PluginDefinition = {
   config: {
     id: 'clock',
     name: 'Clock',

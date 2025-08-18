@@ -9,7 +9,7 @@ Dash It All is a display-only dashboard designed to show calendar events from vd
 ## Features
 
 - **Vdir Format Support**: Read calendars from vdir collections (one .ics file per event)
-- **Modular Widget System**: Extensible architecture with built-in clock and calendar widgets
+- **Modular Plugin System**: Extensible architecture with built-in clock and calendar plugins
 - **Real-time File Watching**: Automatically updates when calendar files change
 - **Multiple Collections**: Support for multiple calendar collections with custom styling
 - **TypeScript**: Full TypeScript support for type safety
@@ -18,15 +18,15 @@ Dash It All is a display-only dashboard designed to show calendar events from vd
 
 ### Core Components
 
-- **Widget Registry**: Manages dashboard widgets with a pluggable architecture
+- **Plugin Registry**: Manages dashboard plugins with a pluggable architecture
 - **Vdir Parser**: Handles parsing of vdir format calendar collections
 - **File Watcher**: Monitors filesystem changes for real-time updates
 - **Configuration System**: JSON-based configuration for collections and settings
 
-### Built-in Widgets
+### Built-in Plugins
 
-- **Clock Widget**: Displays current time and date
-- **Calendar Widget**: Shows upcoming events from configured collections
+- **Clock Plugin**: Displays current time and date
+- **Calendar Plugin**: Shows upcoming events from configured collections
 
 ## Data Format
 
@@ -99,9 +99,9 @@ bun run preview
 ```
 src/
 ├── lib/
-│   ├── widgets/           # Widget system
-│   │   ├── built-in/      # Built-in widgets
-│   │   └── registry.ts    # Widget registry
+│   ├── plugins/           # Plugin system
+│   │   ├── built-in/      # Built-in plugins
+│   │   └── registry.ts    # Plugin registry
 │   ├── types/             # TypeScript definitions
 │   ├── config.ts          # Configuration loader
 │   ├── vdir-parser.ts     # Calendar parsing
@@ -111,31 +111,31 @@ src/
 └── app.html               # Application shell
 ```
 
-## Widget Development
+## Plugin Development
 
-### Creating Custom Widgets
+### Creating Custom Plugins
 
-1. Define widget configuration:
+1. Define plugin configuration:
 
 ```typescript
-const widgetConfig: WidgetConfig = {
-	id: 'my-widget',
-	name: 'My Widget',
+const pluginConfig: PluginConfig = {
+	id: 'my-plugin',
+	name: 'My Plugin',
 	category: 'utility',
-	description: 'My custom widget'
+	description: 'My custom plugin'
 };
 ```
 
-2. Create Svelte component implementing the widget interface
+2. Create Svelte component implementing the plugin interface
 
-3. Register with the widget registry:
+3. Register with the plugin registry:
 
 ```typescript
-import { widgetRegistry } from '$lib/widgets/registry.js';
+import { pluginRegistry } from '$lib/plugins/registry.js';
 
-widgetRegistry.register({
-	config: widgetConfig,
-	component: MyWidgetComponent
+pluginRegistry.register({
+	config: pluginConfig,
+	component: MyPluginComponent
 });
 ```
 

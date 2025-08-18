@@ -77,43 +77,43 @@ interface FileWatcherEvent {
 }
 ```
 
-## Widget System
+## Plugin System
 
-### WidgetConfig
+### PluginConfig
 
-Configuration for a dashboard widget.
+Configuration for a dashboard plugin.
 
 ```typescript
-interface WidgetConfig {
-	id: string; // Unique widget identifier
+interface PluginConfig {
+	id: string; // Unique plugin identifier
 	name: string; // Display name
-	category: string; // Widget category for grouping
-	description: string; // Widget description
+	category: string; // Plugin category for grouping
+	description: string; // Plugin description
 }
 ```
 
-### WidgetDefinition
+### PluginDefinition
 
-Complete widget definition including component.
+Complete plugin definition including component.
 
 ```typescript
-interface WidgetDefinition {
-	config: WidgetConfig; // Widget configuration
+interface PluginDefinition {
+	config: PluginConfig; // Plugin configuration
 	component: ComponentType; // Svelte component
 }
 ```
 
-### WidgetRegistry
+### PluginRegistry
 
-Central registry for managing widgets.
+Central registry for managing plugins.
 
 ```typescript
-class WidgetRegistry {
-	register(definition: WidgetDefinition): void;
+class PluginRegistry {
+	register(definition: PluginDefinition): void;
 	unregister(id: string): boolean;
-	get(id: string): WidgetDefinition | undefined;
-	getAll(): WidgetDefinition[];
-	getByCategory(category: string): WidgetDefinition[];
+	get(id: string): PluginDefinition | undefined;
+	getAll(): PluginDefinition[];
+	getByCategory(category: string): PluginDefinition[];
 	exists(id: string): boolean;
 }
 ```
@@ -165,31 +165,31 @@ function stopWatching(): void;
 const fileWatcherEvents: EventEmitter<FileWatcherEvent>;
 ```
 
-### Widget Registry
+### Plugin Registry
 
-**File:** `src/lib/widgets/registry.ts`
+**File:** `src/lib/plugins/registry.ts`
 
 ```typescript
-// Global widget registry instance
-export const widgetRegistry: WidgetRegistry;
+// Global plugin registry instance
+export const pluginRegistry: PluginRegistry;
 
-// Register a new widget
-widgetRegistry.register(definition: WidgetDefinition): void;
+// Register a new plugin
+pluginRegistry.register(definition: PluginDefinition): void;
 
-// Get all registered widgets
-widgetRegistry.getAll(): WidgetDefinition[];
+// Get all registered plugins
+pluginRegistry.getAll(): PluginDefinition[];
 
-// Get widgets by category
-widgetRegistry.getByCategory(category: string): WidgetDefinition[];
+// Get plugins by category
+pluginRegistry.getByCategory(category: string): PluginDefinition[];
 ```
 
-## Built-in Widgets
+## Built-in Plugins
 
-### Clock Widget
+### Clock Plugin
 
 **ID:** `clock`  
 **Category:** `time`  
-**File:** `src/lib/widgets/built-in/clock/ClockWidget.svelte`
+**File:** `src/lib/plugins/built-in/clock/ClockPlugin.svelte`
 
 Displays current time and date with automatic updates.
 
@@ -201,18 +201,18 @@ Displays current time and date with automatic updates.
 - Date display
 - Configurable time format
 
-### Calendar Widget
+### Calendar Plugin
 
 **ID:** `calendar`  
 **Category:** `calendar`  
-**File:** `src/lib/widgets/built-in/calendar/CalendarWidget.svelte`
+**File:** `src/lib/plugins/built-in/calendar/CalendarPlugin.svelte`
 
 Shows upcoming events from configured calendar collections.
 
 **Props:**
 
 ```typescript
-interface CalendarWidgetProps {
+interface CalendarPluginProps {
 	collections?: string[]; // Specific collections to display
 	maxEvents?: number; // Maximum events to show
 	timeRange?: string; // Time range filter ('day', 'week', 'month')
@@ -259,9 +259,9 @@ fileWatcherEvents.on('change', (event: FileWatcherEvent) => {
 });
 ```
 
-### Widget Events
+### Plugin Events
 
-Widgets can emit custom events through the Svelte component event system:
+Plugins can emit custom events through the Svelte component event system:
 
 ```svelte
 <script>
@@ -270,7 +270,7 @@ Widgets can emit custom events through the Svelte component event system:
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
-		dispatch('widget-action', { action: 'clicked' });
+		dispatch('plugin-action', { action: 'clicked' });
 	}
 </script>
 ```

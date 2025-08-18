@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import DashboardGrid from '$lib/components/dashboard-grid.svelte';
-	import { dashboardWidgets } from '$lib/stores/dashboard.js';
+	import { dashboardPlugins } from '$lib/stores/dashboard.js';
 	import { startEventRefresh } from '$lib/stores/calendar-client.js';
 	import { showGrid } from '$lib/stores/grid-visibility.js';
 	import { Grid3x3, Grid2x2X } from 'lucide-svelte';
-	import '$lib/widgets/index.js'; // Initialize widget registry
+	import '$lib/plugins/index.js'; // Initialize plugin registry
 	import '../app.css';
 
 	let cleanup: (() => void) | null = null;
@@ -38,7 +38,7 @@
 			<Grid3x3 size={20} />
 		{/if}
 	</button>
-	<DashboardGrid widgets={$dashboardWidgets} />
+	<DashboardGrid plugins={$dashboardPlugins} />
 </div>
 
 <style>

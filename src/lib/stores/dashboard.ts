@@ -1,13 +1,13 @@
 import { writable } from 'svelte/store';
-import type { WidgetInstance } from '$lib/types/widget.js';
+import type { PluginInstance } from '$lib/types/plugin.js';
 
-// Default widget layout demonstrating the 12x8 grid system
+// Default plugin layout demonstrating the 12x8 grid system
 // Grid coordinates: x,y are 0-based, width/height specify span
 // Full grid: x: 0-11 (12 columns), y: 0-7 (8 rows)
-const defaultWidgets: WidgetInstance[] = [
+const defaultPlugins: PluginInstance[] = [
   {
     id: 'header-clock',
-    widgetId: 'clock',
+    pluginId: 'clock',
     name: 'Header Clock',
     settings: {
       timeFormat: '12h',
@@ -19,7 +19,7 @@ const defaultWidgets: WidgetInstance[] = [
   },
   {
     id: 'main-calendar',
-    widgetId: 'calendar',
+    pluginId: 'calendar',
     name: 'Weekly Calendar',
     settings: {
       viewType: 'week',
@@ -31,7 +31,7 @@ const defaultWidgets: WidgetInstance[] = [
   },
   {
     id: 'daily-agenda',
-    widgetId: 'agenda',
+    pluginId: 'agenda',
     name: 'Today\'s Agenda',
     settings: {
       showLocation: true,
@@ -42,18 +42,18 @@ const defaultWidgets: WidgetInstance[] = [
   },
 ];
 
-export const dashboardWidgets = writable<WidgetInstance[]>(defaultWidgets);
+export const dashboardPlugins = writable<PluginInstance[]>(defaultPlugins);
 
-export function addWidget(widget: WidgetInstance) {
-  dashboardWidgets.update(widgets => [...widgets, widget]);
+export function addPlugin(plugin: PluginInstance) {
+  dashboardPlugins.update(plugins => [...plugins, plugin]);
 }
 
-export function removeWidget(widgetId: string) {
-  dashboardWidgets.update(widgets => widgets.filter(w => w.id !== widgetId));
+export function removePlugin(pluginId: string) {
+  dashboardPlugins.update(plugins => plugins.filter(p => p.id !== pluginId));
 }
 
-export function updateWidget(widgetId: string, updates: Partial<WidgetInstance>) {
-  dashboardWidgets.update(widgets =>
-    widgets.map(w => w.id === widgetId ? { ...w, ...updates } : w)
+export function updatePlugin(pluginId: string, updates: Partial<PluginInstance>) {
+  dashboardPlugins.update(plugins =>
+    plugins.map(p => p.id === pluginId ? { ...p, ...updates } : p)
   );
 }

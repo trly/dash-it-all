@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { WidgetProps } from '$lib/types/widget.js';
+	import type { PluginProps } from '$lib/types/plugin.js';
 	import { Clock } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
-	type Props = WidgetProps;
+	type Props = PluginProps;
 
 	let { instance, settings }: Props = $props();
 

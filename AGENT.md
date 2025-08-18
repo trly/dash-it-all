@@ -15,7 +15,7 @@
 - **bits.ui** for UI components, **lucide-svelte** for icons
 - **node-ical** for parsing vdir items, **chokidar** for file watching
 - **Vdir-only** calendar collections from `/static/config.json`
-- **Modular dashboard** with pluggable widgets/components
+- **Modular dashboard** with pluggable plugins/components
 - **Pimsync integration** - supports vdir format calendar collections
 
 ## Data Sources

@@ -9,7 +9,7 @@ Dash It All is a display-only dashboard designed to show calendar events from vd
 ## Features
 
 - **Vdir Format Support**: Read calendars from vdir collections (one .ics file per event)
-- **Modular Widget System**: Extensible architecture with built-in clock and calendar widgets
+- **Modular Plugin System**: Extensible architecture with built-in clock and calendar plugins
 - **Real-time File Watching**: Automatically updates when calendar files change
 - **Multiple Collections**: Support for multiple calendar collections with custom styling
 - **TypeScript**: Full TypeScript support for type safety

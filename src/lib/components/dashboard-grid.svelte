@@ -1,22 +1,22 @@
 <script lang="ts">
-	import type { WidgetInstance } from '$lib/types/widget.js';
-	import { widgetRegistry } from '$lib/widgets/registry.js';
+	import type { PluginInstance } from '$lib/types/plugin.js';
+	import { pluginRegistry } from '$lib/plugins/registry.js';
 	import { showGrid } from '$lib/stores/grid-visibility.js';
 
 	interface Props {
-		widgets: WidgetInstance[];
+		plugins: PluginInstance[];
 	}
 
-	let { widgets }: Props = $props();
+	let { plugins }: Props = $props();
 
-	function renderWidget(instance: WidgetInstance) {
-		const definition = widgetRegistry.get(instance.widgetId);
+	function renderPlugin(instance: PluginInstance) {
+		const definition = pluginRegistry.get(instance.pluginId);
 		if (!definition) {
-			console.warn(`Widget definition not found for: ${instance.widgetId}`);
+			console.warn(`Plugin definition not found for: ${instance.pluginId}`);
 			return null;
 		}
 
-		// Apply maxSize constraints to the widget's position
+		// Apply maxSize constraints to the plugin's position
 		const maxSize = definition.config.maxSize;
 		const effectiveWidth = maxSize?.width 
 			? Math.min(instance.position.width, maxSize.width)
@@ -48,13 +48,13 @@
 			{/each}
 		</div>
 	{/if}
-	{#each widgets as widget (widget.id)}
-		{@const rendered = renderWidget(widget)}
-		{#if rendered && widget.enabled}
+	{#each plugins as plugin (plugin.id)}
+		{@const rendered = renderPlugin(plugin)}
+		{#if rendered && plugin.enabled}
 			{@const Component = rendered.component}
 			{@const pos = rendered.effectivePosition}
 			<div
-				class="widget-container"
+				class="plugin-container"
 				style="
 					grid-column: {pos.x + 1} / {pos.x + pos.width + 1};
 					grid-row: {pos.y + 1} / {pos.y + pos.height + 1};
@@ -78,14 +78,14 @@
 		overflow: hidden;
 	}
 
-	.widget-container {
+	.plugin-container {
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		min-height: 120px;
 	}
 
-	.widget-container > :global(*) {
+	.plugin-container > :global(*) {
 		flex: 1;
 		min-height: 0;
 	}
@@ -115,7 +115,7 @@
 		border-bottom: 1px solid var(--oc-blue-4);
 	}
 
-	.show-grid .widget-container {
+	.show-grid .plugin-container {
 		z-index: 2;
 		position: relative;
 	}
@@ -139,7 +139,7 @@
 			overflow: visible;
 		}
 
-		.widget-container {
+		.plugin-container {
 			grid-column: 1 !important;
 			grid-row: auto !important;
 			min-height: 200px;
