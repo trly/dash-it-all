@@ -28,6 +28,9 @@ jobs:
       - name: Check formatting
         run: bun run format:check
 
+      - name: Sync SvelteKit
+        run: bunx svelte-kit sync
+
       - name: Lint and type check
         run: bun run lint
 
