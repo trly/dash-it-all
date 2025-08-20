@@ -2,21 +2,30 @@
 
 ## Commands
 
-- **Dev**: `bun run dev` - Start development server
-- **Build**: `bun run build` - Build for production
+- **Dev**: `bun run dev` - Start development server (`vite dev`)
+- **Build**: `bun run build` - Build for production (`bun --bun vite build`)
+- **Build Binary**: `bun run build:exe` - Build standalone binary executable
 - **Type Check**: `bun run check` - Run TypeScript type checking
 - **Type Check (Watch)**: `bun run check:watch` - Continuous type checking
-- **Preview**: `bun run preview` - Preview production build
+- **Preview**: `bun run preview` - Preview production build (`vite preview`)
+- **Test**: `bun run test` - Run unit tests with Bun's native test runner
+- **Lint**: `bun run lint` - Run prettier, eslint, and svelte-check
+- **Lint Fix**: `bun run lint:fix` - Auto-fix linting issues
+- **Format**: `bun run format` - Format code with prettier
 - **Install**: `bun install` - Install dependencies
 
 ## Architecture
 
 - **SvelteKit** app with TypeScript and Vite
-- **bits.ui** for UI components, **lucide-svelte** for icons
+- **@eslym/sveltekit-adapter-bun** for Bun runtime adapter
+- **bits.ui** for UI components, **lucide-svelte** for icons, **open-color** for CSS variables
 - **node-ical** for parsing vdir items, **chokidar** for file watching
-- **Vdir-only** calendar collections from `/static/config.json`
-- **Modular dashboard** with pluggable plugins/components
+- **Leaflet** for map components
+- **Vdir-only** calendar collections from `config.json` (root level, not static)
+- **Plugin system** with built-in plugins (clock, calendar, agenda) and registry
+- **12x8 grid layout** system for dashboard positioning
 - **Pimsync integration** - supports vdir format calendar collections
+- **Binary compilation** support via Bun's `--compile` flag
 
 ## Data Sources
 
