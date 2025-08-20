@@ -5,26 +5,26 @@
 	--text-primary: var(--oc-gray-9);
 	--text-secondary: var(--oc-gray-6);
 	--text-tertiary: var(--oc-gray-5);
-	
+
 	--bg-primary: var(--oc-white);
 	--bg-secondary: var(--oc-violet-0);
 	--bg-tertiary: var(--oc-violet-1);
 	--bg-hover: var(--oc-violet-2);
-	
+
 	--bg-event: var(--oc-violet-1);
 	--bg-event-hover: var(--oc-violet-3);
 	--bg-current: var(--oc-green-0);
 	--bg-upcoming: var(--oc-orange-0);
-	
+
 	--border-color: var(--oc-gray-3);
 	--border-light: var(--oc-gray-2);
-	
+
 	--color-primary: var(--oc-violet-6);
 	--color-primary-hover: var(--oc-violet-7);
 	--color-success: var(--oc-green-6);
 	--color-warning: var(--oc-orange-6);
 	--color-error: var(--oc-red-6);
-	
+
 	--shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
 	--shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
 	--radius-small: 6px;
@@ -38,20 +38,20 @@
 		--text-primary: var(--oc-gray-0);
 		--text-secondary: var(--oc-gray-4);
 		--text-tertiary: var(--oc-gray-5);
-		
+
 		--bg-primary: var(--oc-gray-9);
 		--bg-secondary: var(--oc-gray-8);
 		--bg-tertiary: var(--oc-gray-7);
 		--bg-hover: var(--oc-gray-6);
-		
+
 		--bg-event: var(--oc-gray-8);
 		--bg-event-hover: var(--oc-blue-9);
 		--bg-current: var(--oc-green-9);
 		--bg-upcoming: var(--oc-orange-9);
-		
+
 		--border-color: var(--oc-gray-6);
 		--border-light: var(--oc-gray-7);
-		
+
 		--color-primary: var(--oc-blue-4);
 		--color-primary-hover: var(--oc-blue-3);
 		--color-success: var(--oc-green-4);

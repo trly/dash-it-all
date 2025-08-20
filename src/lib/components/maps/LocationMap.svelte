@@ -19,34 +19,41 @@
 		try {
 			// Use Nominatim (OpenStreetMap's geocoding service)
 			const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationQuery)}&limit=1`;
+			// eslint-disable-next-line no-undef
 			console.log('Geocoding URL:', url);
-			
+
+			// eslint-disable-next-line no-undef
 			const response = await fetch(url, {
 				headers: {
 					'User-Agent': 'DashItAll-Calendar/1.0'
 				}
 			});
-			
+
 			if (!response.ok) {
+				// eslint-disable-next-line no-undef
 				console.error('Geocoding response not ok:', response.status, response.statusText);
 				throw new Error(`Geocoding request failed: ${response.status}`);
 			}
 
 			const data = await response.json();
+			// eslint-disable-next-line no-undef
 			console.log('Geocoding response:', data);
-			
+
 			if (data.length === 0) {
+				// eslint-disable-next-line no-undef
 				console.warn('No results found for location:', locationQuery);
 				return null;
 			}
 
 			const result = data[0];
+			// eslint-disable-next-line no-undef
 			console.log('Using result:', result);
-			
+
 			// Dynamically import Leaflet to avoid SSR issues
 			const L = await import('leaflet');
 			return L.latLng(parseFloat(result.lat), parseFloat(result.lon));
 		} catch (err) {
+			// eslint-disable-next-line no-undef
 			console.error('Geocoding error:', err);
 			return null;
 		}
@@ -58,36 +65,42 @@
 			error = null;
 
 			if (!mapContainer) {
+				// eslint-disable-next-line no-undef
 				console.error('Map container not available');
 				error = 'Map container not ready';
 				loading = false;
 				return;
 			}
 
+			// eslint-disable-next-line no-undef
 			console.log('Geocoding location:', location);
-			
+
 			// Geocode the location first
 			const coordinates = await geocodeLocation(location);
-			
+
 			if (!coordinates) {
 				error = 'Location not found';
 				loading = false;
 				return;
 			}
 
+			// eslint-disable-next-line no-undef
 			console.log('Found coordinates:', coordinates);
 
 			// Dynamically import Leaflet to avoid SSR issues
 			const L = await import('leaflet');
 
 			// Fix Leaflet's default icon path issue
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			delete (L.Icon.Default.prototype as any)._getIconUrl;
 			L.Icon.Default.mergeOptions({
-				iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+				iconRetinaUrl:
+					'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
 				iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-				shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+				shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
 			});
 
+			// eslint-disable-next-line no-undef
 			console.log('Initializing map...');
 
 			// Initialize the map
@@ -105,10 +118,12 @@
 			});
 
 			tileLayer.on('load', () => {
+				// eslint-disable-next-line no-undef
 				console.log('Tiles loaded successfully');
 			});
 
 			tileLayer.on('tileerror', (e) => {
+				// eslint-disable-next-line no-undef
 				console.error('Tile loading error:', e);
 			});
 
@@ -126,8 +141,10 @@
 			}, 100);
 
 			loading = false;
+			// eslint-disable-next-line no-undef
 			console.log('Map initialized successfully');
 		} catch (err) {
+			// eslint-disable-next-line no-undef
 			console.error('Map initialization error:', err);
 			error = `Failed to load map: ${err instanceof Error ? err.message : 'Unknown error'}`;
 			loading = false;
@@ -137,15 +154,18 @@
 	onMount(() => {
 		if (typeof window !== 'undefined') {
 			// Add Leaflet CSS
+			// eslint-disable-next-line no-undef
 			if (!document.querySelector('link[href*="leaflet"]')) {
+				// eslint-disable-next-line no-undef
 				const link = document.createElement('link');
 				link.rel = 'stylesheet';
 				link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 				link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
 				link.crossOrigin = '';
+				// eslint-disable-next-line no-undef
 				document.head.appendChild(link);
 			}
-			
+
 			// Wait a bit for the container to be ready and CSS to load
 			setTimeout(() => {
 				initializeMap();
@@ -161,13 +181,10 @@
 	});
 </script>
 
-<div 
-	class="map-container"
-	style="height: {height}; width: {width}"
->
+<div class="map-container" style="height: {height}; width: {width}">
 	<!-- Always render the map container -->
 	<div bind:this={mapContainer} class="leaflet-map"></div>
-	
+
 	<!-- Show loading overlay -->
 	{#if loading}
 		<div class="map-overlay map-loading">
@@ -175,7 +192,7 @@
 			<span>Loading map...</span>
 		</div>
 	{/if}
-	
+
 	<!-- Show error overlay -->
 	{#if error}
 		<div class="map-overlay map-error">
@@ -235,8 +252,12 @@
 	}
 
 	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
 	}
 
 	/* Override Leaflet's default styles to match our theme */

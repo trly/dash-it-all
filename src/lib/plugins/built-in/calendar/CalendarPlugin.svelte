@@ -1,15 +1,14 @@
 <script lang="ts">
 	import type { PluginProps } from '$lib/types/plugin.js';
 	import type { CalendarEvent } from '$lib/types';
-	import { Calendar } from 'lucide-svelte';
-	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
+	import { calendarEvents, currentDate } from '$lib/stores/calendar-client';
 	import { SvelteDate } from 'svelte/reactivity';
 	import EventItem from '$lib/components/events/EventItem.svelte';
 	import { isAllDayEvent, getEventKey } from '$lib/components/events/event-utils.js';
 
 	type Props = PluginProps;
 
-	let { instance, settings }: Props = $props();
+	let { settings }: Props = $props();
 
 	// Use reactive currentDate from store for midnight updates
 	const reactiveCurrentDate = $derived($currentDate);
@@ -80,8 +79,6 @@
 		return getEventsForDay(day).filter((event) => !isAllDayEvent(event));
 	}
 
-
-
 	function formatDayHeader(date: Date): string {
 		return date.toLocaleDateString('en-US', {
 			weekday: 'short',
@@ -89,8 +86,6 @@
 			day: 'numeric'
 		});
 	}
-
-
 
 	const displayDays = $derived(getDaysToDisplay());
 	const viewType = $derived((settings.viewType as string) || 'week');
@@ -116,24 +111,14 @@
 							<div class="all-day-section">
 								<div class="all-day-label">All Day</div>
 								{#each getAllDayEventsForDay(day) as event (getEventKey(event))}
-									<EventItem
-										{event}
-										mode="calendar"
-										showLocation={false}
-										showCollection={false}
-									/>
+									<EventItem {event} mode="calendar" showLocation={false} showCollection={false} />
 								{/each}
 							</div>
 						{/if}
 
 						<!-- Timed Events Section -->
 						{#each getTimedEventsForDay(day) as event (getEventKey(event))}
-							<EventItem
-								{event}
-								mode="calendar"
-								showLocation={false}
-								showCollection={false}
-							/>
+							<EventItem {event} mode="calendar" showLocation={false} showCollection={false} />
 						{/each}
 					</div>
 				</div>
@@ -151,23 +136,6 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-	}
-
-	.widget-header {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 1px solid var(--border-color);
-		color: var(--text-secondary);
-	}
-
-	.widget-header h3 {
-		margin: 0;
-		font-size: 1.1rem;
-		font-weight: 600;
-		color: var(--text-primary);
 	}
 
 	.calendar-view {
@@ -221,8 +189,6 @@
 		gap: 0.125rem;
 	}
 
-
-
 	.all-day-section {
 		border-bottom: 1px solid var(--border-color);
 		margin-bottom: 0.25rem;
@@ -238,6 +204,4 @@
 		letter-spacing: 0.5px;
 		text-align: left;
 	}
-
-
 </style>

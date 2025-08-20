@@ -12,7 +12,6 @@
 	function renderPlugin(instance: PluginInstance) {
 		const definition = pluginRegistry.get(instance.pluginId);
 		if (!definition) {
-			console.warn(`Plugin definition not found for: ${instance.pluginId}`);
 			return null;
 		}
 
@@ -112,7 +111,7 @@
 		border-right: 1px solid var(--oc-blue-4);
 	}
 
-	.grid-cell:nth-child(n+85) {
+	.grid-cell:nth-child(n + 85) {
 		border-bottom: 1px solid var(--oc-blue-4);
 	}
 

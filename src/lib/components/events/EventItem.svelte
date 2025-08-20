@@ -86,7 +86,7 @@
 		transition: all 0.2s ease;
 		cursor: pointer;
 	}
-	
+
 	.event-item:hover {
 		background-color: var(--bg-event-hover);
 	}

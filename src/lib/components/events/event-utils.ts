@@ -7,12 +7,12 @@ export function isAllDayEvent(event: CalendarEvent): boolean {
 	// node-ical marks all day events with dateOnly property
 	const startDate = new Date(event.start);
 	const endDate = event.end ? new Date(event.end) : null;
-	
+
 	// Check for dateOnly property first
 	if ((event.start as Date & { dateOnly?: boolean })?.dateOnly === true) {
 		return true;
 	}
-	
+
 	// Fallback: check if times are exactly midnight to midnight (indicating all-day)
 	if (endDate) {
 		const isStartMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
@@ -20,7 +20,7 @@ export function isAllDayEvent(event: CalendarEvent): boolean {
 		const isMultipleDays = endDate.getTime() - startDate.getTime() >= 24 * 60 * 60 * 1000;
 		return isStartMidnight && isEndMidnight && isMultipleDays;
 	}
-	
+
 	return false;
 }
 

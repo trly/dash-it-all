@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { PluginProps } from '$lib/types/plugin.js';
 	import type { CalendarEvent } from '$lib/types';
-	import { Calendar } from 'lucide-svelte';
-	import { calendarEvents, calendarMetadata, currentDate } from '$lib/stores/calendar-client';
+	import { calendarEvents, currentDate } from '$lib/stores/calendar-client';
 	import EventItem from '$lib/components/events/EventItem.svelte';
 	import { getEventKey, isAllDayEvent, isEventNow } from '$lib/components/events/event-utils.js';
 	import { appConfig, loadAppConfig } from '$lib/stores/config.js';
@@ -10,7 +9,9 @@
 
 	type Props = PluginProps;
 
-	let { instance, settings }: Props = $props();
+	// Props interface for compatibility but not used in this component
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const props: Props = $props();
 
 	onMount(async () => {
 		await loadAppConfig();

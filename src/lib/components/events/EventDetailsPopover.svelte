@@ -8,7 +8,7 @@
 
 	interface Props {
 		event: CalendarEvent;
-		children: any;
+		children: import('svelte').Snippet;
 	}
 
 	let { event, children }: Props = $props();
@@ -22,8 +22,6 @@
 		const metadata = $calendarMetadata.get(collectionName);
 		return metadata?.displayname || collectionName;
 	}
-
-	const isAllDay = $derived(isAllDayEvent(event));
 
 	function formatEventDateTime(event: CalendarEvent): string {
 		if (isAllDayEvent(event)) {
@@ -50,11 +48,7 @@
 		{@render children()}
 	</Popover.Trigger>
 	<Popover.Portal>
-		<Popover.Content
-			class="event-details-popover"
-			side="bottom"
-			sideOffset={8}
-		>
+		<Popover.Content class="event-details-popover" side="bottom" sideOffset={8}>
 			<div class="space-y-4">
 				<!-- Header with close button -->
 				<div class="popover-header">
@@ -72,10 +66,7 @@
 							</span>
 						</div>
 					</div>
-					<Popover.Close
-						class="popover-close"
-						aria-label="Close"
-					>
+					<Popover.Close class="popover-close" aria-label="Close">
 						<X class="close-icon" />
 					</Popover.Close>
 				</div>
@@ -106,12 +97,7 @@
 								class="map-link"
 							>
 								View on OpenStreetMap
-								<svg
-									class="external-icon"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
+								<svg class="external-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -149,7 +135,7 @@
 					<div class="popover-section">
 						<h4 class="section-title">Attendees</h4>
 						<div class="attendees-list">
-							{#each event.attendees as attendee}
+							{#each event.attendees as attendee (attendee)}
 								<p class="section-content">
 									{attendee}
 								</p>
@@ -163,7 +149,7 @@
 					<div class="popover-section">
 						<h4 class="section-title">Categories</h4>
 						<div class="categories-list">
-							{#each event.categories as category}
+							{#each event.categories as category (category)}
 								<span class="category-tag">
 									{category}
 								</span>
