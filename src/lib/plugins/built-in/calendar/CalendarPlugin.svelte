@@ -27,8 +27,8 @@
 
 	function getDaysToDisplay(): Date[] {
 		const days: Date[] = [];
-		const viewType = settings.viewType as string || 'week';
-		const daysToShow = settings.daysToShow as number || 7;
+		const viewType = (settings.viewType as string) || 'week';
+		const daysToShow = (settings.daysToShow as number) || 7;
 
 		if (viewType === 'week') {
 			// If showing less than 7 days, start from today; otherwise start from week beginning
@@ -93,8 +93,8 @@
 
 
 	const displayDays = $derived(getDaysToDisplay());
-	const viewType = $derived(settings.viewType as string || 'week');
-	const daysToShow = $derived(settings.daysToShow as number || 7);
+	const viewType = $derived((settings.viewType as string) || 'week');
+	const daysToShow = $derived((settings.daysToShow as number) || 7);
 </script>
 
 <div class="calendar-widget">

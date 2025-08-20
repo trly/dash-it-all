@@ -18,10 +18,10 @@
 
 		// Apply maxSize constraints to the plugin's position
 		const maxSize = definition.config.maxSize;
-		const effectiveWidth = maxSize?.width 
+		const effectiveWidth = maxSize?.width
 			? Math.min(instance.position.width, maxSize.width)
 			: instance.position.width;
-		const effectiveHeight = maxSize?.height 
+		const effectiveHeight = maxSize?.height
 			? Math.min(instance.position.height, maxSize.height)
 			: instance.position.height;
 
@@ -43,7 +43,8 @@
 <div class="dashboard-grid" class:show-grid={$showGrid}>
 	{#if $showGrid}
 		<div class="grid-overlay">
-			{#each Array(96) as _, i}
+			<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+			{#each Array(96) as _, i (i)}
 				<div class="grid-cell"></div>
 			{/each}
 		</div>
@@ -125,7 +126,7 @@
 		.dashboard-grid {
 			grid-template-rows: repeat(6, 1fr);
 		}
-		
+
 		.grid-overlay {
 			grid-template-rows: repeat(6, 1fr);
 		}

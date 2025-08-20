@@ -27,9 +27,9 @@
 </svelte:head>
 
 <div class="dashboard">
-	<button 
+	<button
 		class="grid-toggle"
-		on:click={() => showGrid.update(v => !v)}
+		on:click={() => showGrid.update((v) => !v)}
 		title="Toggle grid visibility"
 	>
 		{#if $showGrid}
