@@ -256,11 +256,6 @@
 		color: var(--text-primary);
 	}
 
-	.close-icon {
-		width: 1rem;
-		height: 1rem;
-	}
-
 	.popover-section {
 		display: flex;
 		flex-direction: column;

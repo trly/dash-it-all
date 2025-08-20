@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "bun --bun vite build",
 		"build:exe": "bun --bun vite build && bun build ./build/index.js --compile --minifiy --outfile ./dist/dash-it-all",
 		"preview": "vite preview",
 		"prepare": "husky",
