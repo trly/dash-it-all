@@ -66,3 +66,8 @@ export interface FileWatcherEvent {
 	filePath: string;
 	collection: string;
 }
+
+export interface Config {
+	collections: VdirCollectionConfig[];
+	plugins: string[];
+}
