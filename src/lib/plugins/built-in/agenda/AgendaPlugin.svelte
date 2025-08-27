@@ -19,7 +19,7 @@
 
 	function getTodaysEvents(): CalendarEvent[] {
 		const now = $currentDate;
-		const targetDate = new Date();
+		const targetDate = $currentDate;
 
 		return $calendarEvents
 			.filter((event) => {
@@ -89,7 +89,7 @@
 
 <div class="agenda-widget">
 	<div class="agenda-header">
-		<h2>{formatDateHeader(new Date())}</h2>
+		<h2>{formatDateHeader($currentDate)}</h2>
 		{#if inProgressNotifications.length > 0}
 			<div class="notification-pill pulse">
 				<span>
