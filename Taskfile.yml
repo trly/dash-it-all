@@ -1,0 +1,23 @@
+version: '3'
+
+tasks:
+  dev:
+    desc: Start development server with tmux
+    cmds:
+      - tmux new-session -d -s dash-it-all-dev 'bun run dev'
+      - echo "Session started. Use 'task dev:attach' to connect, 'task dev:kill' to stop"
+
+  'dev:attach':
+    desc: Attach to existing dev server tmux session
+    cmds:
+      - tmux attach-session -t dash-it-all-dev
+
+  'dev:kill':
+    desc: Kill the dev server tmux session
+    cmds:
+      - tmux kill-session -t dash-it-all-dev
+
+  'dev:logs':
+    desc: Show dev server logs from tmux session
+    cmds:
+      - tmux capture-pane -t dash-it-all-dev -p
