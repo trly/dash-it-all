@@ -13,12 +13,8 @@
 	// Use reactive currentDate from store for midnight updates
 	const reactiveCurrentDate = $derived($currentDate);
 
-	function getWeekStart(date: Date): Date {
-		const d = new SvelteDate(date);
-		const day = d.getDay();
-		const diff = d.getDate() - day;
-		return new SvelteDate(d.setDate(diff));
-	}
+	// Scroll container reference for "Today" button functionality
+	let scrollContainer: HTMLDivElement;
 
 	function getMonthStart(date: Date): Date {
 		return new Date(date.getFullYear(), date.getMonth(), 1);
@@ -27,13 +23,13 @@
 	function getDaysToDisplay(): Date[] {
 		const days: Date[] = [];
 		const viewType = (settings.viewType as string) || 'week';
-		const daysToShow = (settings.daysToShow as number) || 7;
 
 		if (viewType === 'week') {
-			// If showing less than 7 days, start from today; otherwise start from week beginning
-			const startDate =
-				daysToShow < 7 ? new SvelteDate(reactiveCurrentDate) : getWeekStart(reactiveCurrentDate);
-			for (let i = 0; i < daysToShow; i++) {
+			// For scrollable view, always show 14 days starting from today
+			const startDate = new SvelteDate(reactiveCurrentDate);
+			const totalDays = 14; // Always show 14 days for scrollable view
+
+			for (let i = 0; i < totalDays; i++) {
 				const day = new SvelteDate(startDate);
 				day.setDate(startDate.getDate() + i);
 				days.push(day);
@@ -90,6 +86,36 @@
 	const displayDays = $derived(getDaysToDisplay());
 	const viewType = $derived((settings.viewType as string) || 'week');
 	const daysToShow = $derived((settings.daysToShow as number) || 7);
+
+	function scrollToToday() {
+		// Force regeneration of the day display starting from today
+		const today = new SvelteDate();
+		today.setHours(0, 0, 0, 0);
+
+		// Find the index of today in the current display
+		const todayIndex = displayDays.findIndex((day) => {
+			const displayDay = new SvelteDate(day);
+			displayDay.setHours(0, 0, 0, 0);
+			return displayDay.getTime() === today.getTime();
+		});
+
+		if (scrollContainer) {
+			if (todayIndex >= 0) {
+				// Today is visible, scroll to it
+				const dayWidth = scrollContainer.scrollWidth / displayDays.length;
+				scrollContainer.scrollTo({
+					left: todayIndex * dayWidth,
+					behavior: 'smooth'
+				});
+			} else {
+				// Today is not visible, scroll to the beginning (which should be today or close to it)
+				scrollContainer.scrollTo({
+					left: 0,
+					behavior: 'smooth'
+				});
+			}
+		}
+	}
 </script>
 
 <div class="calendar-widget">
@@ -98,6 +124,8 @@
 		style="--days-to-show: {daysToShow}"
 		class:week-view={viewType === 'week'}
 		class:month-view={viewType === 'month'}
+		class:scrollable-week={viewType === 'week'}
+		bind:this={scrollContainer}
 	>
 		<div class="calendar-grid">
 			{#each displayDays as day (day.toISOString())}
@@ -125,6 +153,11 @@
 			{/each}
 		</div>
 	</div>
+	{#if viewType === 'week'}
+		<div class="calendar-footer">
+			<button class="today-button" onclick={scrollToToday}>Today</button>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -138,9 +171,42 @@
 		flex-direction: column;
 	}
 
+	.calendar-footer {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 0.5rem;
+	}
+
+	.today-button {
+		padding: 0.5rem 1rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-small);
+		color: var(--text-primary);
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+
+	.today-button:hover {
+		background: var(--bg-tertiary);
+	}
+
 	.calendar-view {
 		flex: 1;
 		overflow-y: auto;
+	}
+
+	.scrollable-week {
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* Internet Explorer 10+ */
+	}
+
+	.scrollable-week::-webkit-scrollbar {
+		display: none; /* WebKit */
 	}
 
 	.calendar-grid {
@@ -152,7 +218,9 @@
 	}
 
 	.week-view .calendar-grid {
-		grid-template-columns: repeat(var(--days-to-show, 7), 1fr);
+		grid-template-columns: repeat(14, 1fr);
+		width: calc(100% * 14 / 3);
+		min-width: 100%;
 	}
 
 	.month-view .calendar-grid {
@@ -165,6 +233,8 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 0;
+		scroll-snap-align: start;
+		scroll-snap-stop: always;
 	}
 
 	.day-header {
